@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(robo_team_charlie)
+project(crash_dummy)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -101,7 +101,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES robo_team_charlie
+#  LIBRARIES crash_dummy
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
@@ -115,24 +115,24 @@ catkin_package(
 # include_directories(include)
 
 ## Declare a C++ library
-# add_library(robo_team_charlie
-#   src/${PROJECT_NAME}/robo_team_charlie.cpp
+# add_library(crash_dummy
+#   src/${PROJECT_NAME}/crash_dummy.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(robo_team_charlie ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(crash_dummy ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(robo_team_charlie_node src/robo_team_charlie_node.cpp)
+# add_executable(crash_dummy_node src/crash_dummy_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(robo_team_charlie_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(crash_dummy_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(robo_team_charlie_node
+# target_link_libraries(crash_dummy_node
 #   ${catkin_LIBRARIES}
 # )
 
@@ -151,7 +151,7 @@ catkin_package(
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS robo_team_charlie robo_team_charlie_node
+# install(TARGETS crash_dummy crash_dummy_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -176,7 +176,7 @@ catkin_package(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_robo_team_charlie.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_crash_dummy.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
