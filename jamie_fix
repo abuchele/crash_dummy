@@ -1,0 +1,118 @@
+ROS_IP =
+ROS_MASTER_URI = http://:11311
+odroid@odroid-server:~$ ifconfig
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:616 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:616 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:47444 (47.4 KB)  TX bytes:47444 (47.4 KB)
+
+odroid@odroid-server:~$ sudo service networking start
+[sudo] password for odroid: 
+start: Job failed to start
+odroid@odroid-server:~$ ifconfig
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:616 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:616 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:47444 (47.4 KB)  TX bytes:47444 (47.4 KB)
+
+odroid@odroid-server:~$ sudo ifup eth0
+/etc/network/interfaces:5: too few parameters for iface line
+ifup: couldn't read interfaces file "/etc/network/interfaces"
+odroid@odroid-server:~$ sudo ifconfig eth0 up
+odroid@odroid-server:~$ cd /etc/network/          
+odroid@odroid-server:/etc/network$ ls
+if-down.d       if-pre-up.d  interfaces      interfaces.d  interfacez~
+if-post-down.d  if-up.d      interfaces.BAK  interfaces~   run
+odroid@odroid-server:/etc/network$ vim interface.BAK
+odroid@odroid-server:/etc/network$ sudo ^C
+odroid@odroid-server:/etc/network$ ls -l 
+total 36
+drwxr-xr-x 2 root root 4096 Jun  4  2014 if-down.d
+drwxr-xr-x 2 root root 4096 Jun  4  2014 if-post-down.d
+drwxr-xr-x 2 root root 4096 Jun  4  2014 if-pre-up.d
+drwxr-xr-x 2 root root 4096 Jun  4  2014 if-up.d
+-rw-r--r-- 1 root root   58 Jan  1 00:19 interfaces
+-rw-r--r-- 1 root root  142 Dec 28  2014 interfaces.BAK
+drwxr-xr-x 2 root root 4096 Jan  1 00:19 interfaces.d
+-rw-r--r-- 1 root root  142 Jun  4  2014 interfaces~
+-rw-r--r-- 1 root root   31 Sep  9  2016 interfacez~
+lrwxrwxrwx 1 root root   12 Jun  4  2014 run -> /run/network
+odroid@odroid-server:/etc/network$ chown interfaces odroid
+chown: invalid user: 'interfaces'
+odroid@odroid-server:/etc/network$ chown odroid interfaces
+chown: changing ownership of 'interfaces': Operation not permitted
+odroid@odroid-server:/etc/network$ sudo chown odroid interfaces
+odroid@odroid-server:/etc/network$ odroid^C
+odroid@odroid-server:/etc/network$ sudo ifup eth0
+/etc/network/interfaces:5: too few parameters for iface line
+ifup: couldn't read interfaces file "/etc/network/interfaces"
+odroid@odroid-server:/etc/network$ sudo vim /etc/network/interfaces
+odroid@odroid-server:/etc/network$ ls -l ^C
+odroid@odroid-server:/etc/network$ sudo ifup eth0
+Ignoring unknown interface eth0=eth0.
+odroid@odroid-server:/etc/network$ sudo ifconfig eth0 up
+odroid@odroid-server:/etc/network$ ifconfig
+eth0      Link encap:Ethernet  HWaddr 00:1e:06:32:39:f2  
+          inet6 addr: fe80::21e:6ff:fe32:39f2/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:378 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:6 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:17610 (17.6 KB)  TX bytes:468 (468.0 B)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:712 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:712 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:55300 (55.3 KB)  TX bytes:55300 (55.3 KB)
+
+odroid@odroid-server:/etc/network$ sudo ifup eth0
+Ignoring unknown interface eth0=eth0.
+odroid@odroid-server:/etc/network$ sudo vim /etc/network/interfaces
+odroid@odroid-server:/etc/network$ sudo ifup eth0
+Internet Systems Consortium DHCP Client 4.2.4
+Copyright 2004-2012 Internet Systems Consortium.
+All rights reserved.
+For info, please visit https://www.isc.org/software/dhcp/
+
+Listening on LPF/eth0/00:1e:06:32:39:f2
+Sending on   LPF/eth0/00:1e:06:32:39:f2
+Sending on   Socket/fallback
+DHCPREQUEST of 192.168.1.104 on eth0 to 255.255.255.255 port 67 (xid=0x1b754917)
+DHCPREQUEST of 192.168.1.104 on eth0 to 255.255.255.255 port 67 (xid=0x1b754917)
+DHCPREQUEST of 192.168.1.104 on eth0 to 255.255.255.255 port 67 (xid=0x1b754917)
+DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x7a9bf2d0)
+DHCPREQUEST of 10.42.0.55 on eth0 to 255.255.255.255 port 67 (xid=0x7a9bf2d0)
+DHCPOFFER of 10.42.0.55 from 10.42.0.1
+DHCPACK of 10.42.0.55 from 10.42.0.1
+bound to 10.42.0.55 -- renewal in 1560 seconds.
+odroid@odroid-server:/etc/network$ ifconfig
+eth0      Link encap:Ethernet  HWaddr 00:1e:06:32:39:f2  
+          inet addr:10.42.0.55  Bcast:10.42.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::21e:6ff:fe32:39f2/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:415 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:42 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:21169 (21.1 KB)  TX bytes:4630 (4.6 KB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:726 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:726 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:56372 (56.3 KB)  TX bytes:56372 (56.3 KB)
+
