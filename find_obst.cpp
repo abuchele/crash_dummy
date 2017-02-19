@@ -26,6 +26,7 @@ std::vector<float> average_ranges;
 sensor_msgs::LaserScan scan;
 sensor_msgs::LaserScan filtered_scan;
 
+
 // ros::Publisher pub_arb;
 ros::Publisher pub_filtered_scan;
 ros::Publisher pub_flag;
@@ -53,23 +54,25 @@ void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
 
     // Assign LIDAR scan to global
     scan = lidar_scan;
-
+    sensor_msgs::LaserScan obst_found;
     long number_of_ranges = lidar_scan.ranges.size();
 
     for (int i=0; i< (number_of_ranges-1); i++){
-        if ((scan.ranges[i] > 3)|(scan.ranges[i+1]>3))
+        if ((scan.ranges[i] > 3)&&(scan.ranges[i+1]>3))
         { continue;}
         else {
             if (fabs(scan.ranges[i] - scan.ranges[i + 1]) > threshold) {
+                obst_found.ranges[obs_count] = scan.ranges[i];
+                //ROS_INFO("obsts: %f", (obst_found.ranges));
                 obs_count = obs_count + 1;
-                ROS_INFO("angle: %f", (((scan.angle_min) + (i * scan.angle_increment))*57.3));
+                //ROS_INFO("angle: %f", (((scan.angle_min) + (i * scan.angle_increment))*57.3));
             }
         }
     }
-    ROS_INFO("num obst: %d", obs_count);
+    //ROS_INFO("num obst: %d", obs_count);
 
 
-    ROS_INFO("number of ranges: %d", lidar_scan.ranges.size());
+    //ROS_INFO("number of ranges: %d", lidar_scan.ranges.size());
 
 
     pub_vel.publish(cmd_array);
@@ -118,7 +121,7 @@ int main(int argc, char **argv)
     pub_filtered_scan =n.advertise<sensor_msgs::LaserScan>("obst/filtered_scan", 1000);
     // ros::Publisher pub_arb =n.advertise<std_msgs::Int8MultiArray>("obst/arb", 1000);
 
-    ros::Subscriber sub_imu = n.subscribe("scan", 1000, controlSpeed);
+    //ros::Subscriber sub_imu = n.subscribe("scan", 1000, controlSpeed);
     ros::Subscriber sub_lidar = n.subscribe("scan",1000,controlSpeed);
 
 
