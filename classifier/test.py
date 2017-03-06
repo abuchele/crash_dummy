@@ -2,6 +2,8 @@
 #using detectMultiScale
 import numpy as np
 import cv2
+import rospy
+from std_msgs.msg import Bool
 
 
 def detect(img):
@@ -18,9 +20,22 @@ def box(rects, img):
         cv2.rectangle(img, (x1, y1), (x2, y2), (127, 255, 0), 2)
     #cv2.imwrite('one.jpg', img);
 
+def talker(coke_can):
+    pub = rospy.Publisher('img_rec', Bool, queue_size=10)
+    rospy.init_node('img_rec', anonymous=True)
+    rate = rospy.Rate(10) # 10hz
+    while not rospy.is_shutdown():
+        msg = coke_can % rospy.get_time()
+        rospy.loginfo(msg)
+        pub.publish(msg)
+        break
+
 cap = cv2.VideoCapture(0)
 cap.set(3,400)
 cap.set(4,300)
+
+
+
 
 while(True):
     ret, img = cap.read()
@@ -45,10 +60,19 @@ while(True):
 
     rects, img = detect(output_img)
 
-    if rects == [[]]:
+    if len(rects) == 0:
+        try:
+            talker(0)
+        except rospy.ROSInterruptException:
+            pass
         pass
     else:
         box(rects, output_img)
+        try:
+            talker(1)
+        except rospy.ROSInterruptException:
+            pass
+
     cv2.imshow("frame", output_img)
     if(cv2.waitKey(1) & 0xFF == ord('q')):
 	break
