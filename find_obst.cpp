@@ -7,6 +7,9 @@
  Finds obstacles, converts their location to (x,y) coords, and stores as object
 */
 
+
+
+
 #include <string>
 #include <iostream>
 #include <vector>
@@ -47,17 +50,19 @@ void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
 
     int obs_count=0;
 
+
     // Assign LIDAR scan to global
     scan = lidar_scan;
 
     long number_of_ranges = lidar_scan.ranges.size();
 
     for (int i=0; i< (number_of_ranges-1); i++){
-        if (isinf(scan.ranges[i])|isinf(scan.ranges[i+1])|(scan.ranges[i] > 3)|(scan.ranges[i+1]>3))
+        if ((scan.ranges[i] > 3)|(scan.ranges[i+1]>3))
         { continue;}
         else {
             if (fabs(scan.ranges[i] - scan.ranges[i + 1]) > threshold) {
                 obs_count = obs_count + 1;
+                ROS_INFO("angle: %f", (((scan.angle_min) + (i * scan.angle_increment))*57.3));
             }
         }
     }
