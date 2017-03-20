@@ -66,10 +66,6 @@ void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
             }
         }
     }
-    ROS_INFO("num obst: %d", obs_count);
-
-
-    ROS_INFO("number of ranges: %d", lidar_scan.ranges.size());
 
 
     pub_vel.publish(cmd_array);
