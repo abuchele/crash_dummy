@@ -16,11 +16,19 @@ def detect(img):
     return rects, img
 
 def box(rects, img):
+    max_area = 0
+    biggest_rect = []
     for x1, y1, x2, y2 in rects:
-        cv2.rectangle(img, (x1, y1), (x2, y2), (127, 255, 0), 2)
+        area = abs(x1-x2) * abs(y1-y2)
+        if abs(x1-x2) * abs(y1-y2) > max_area:
+            max_area = area
+            biggest_rect = [x1, y1, x2, y2]
+
+    cv2.rectangle(img, (x1, y1), (x2, y2), (127, 255, 0), 2)
+    return biggest_rect
     #cv2.imwrite('one.jpg', img);
 
-def distance(rects, img):
+def distance(rect, img):
     #cans have height of 10.47 cm and width of 5.24 cm
     #The can is just slightly in front of the claw at 17.78 cm from the camera.
     height_cm = 10.47 #height of the can
@@ -29,11 +37,11 @@ def distance(rects, img):
     px_to_cm = float(height_cm/height_px) #multiply by px to get measurement in cm
     focal_length = (height_px*ref_dist)/height_cm
 
-
-    for x1, y1, x2, y2 in rects:
-        height = abs(y1-y2)
-        distance = (height_cm*focal_length)/height_px
-        print height
+    y1 = rect[1]
+    y2 = rect[3]
+    height = abs(y1-y2)
+    distance = (height_cm*focal_length)/height
+    print distance
         # print distance
         # if 16.0 < distance < 20.0
         #     return True #pick up the can.
@@ -51,7 +59,8 @@ def talker(coke_can):
         pub.publish(msg)
         break
 
-cap = cv2.VideoCapture(1)
+
+cap = cv2.VideoCapture(0) #1 for webcam
 cap.set(3,400)
 cap.set(4,300)
 
@@ -88,13 +97,15 @@ while(True):
             pass
         pass
     else:
-        box(rects, output_img)
-        distance(rects, output_img)
+        rect = box(rects, output_img)
+        distance(rect, output_img)
         try:
             talker(1)
+            pass
         except rospy.ROSInterruptException:
             pass
 
     cv2.imshow("frame", output_img)
-    if(cv2.waitKey(1) & 0xFF == ord('q')):
-	break
+    k = cv2.waitKey(1) & 0xFF
+    if k == ord('q'):
+	       break
