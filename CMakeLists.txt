@@ -188,3 +188,4 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_executable(random random_walk.cpp)
 target_link_libraries(random ${catkin_LIBRARIES})
+
