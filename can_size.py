@@ -41,8 +41,8 @@ def distance(rect, img):
     y2 = rect[3]
     height = abs(y1-y2)
     distance = (height_cm*focal_length)/height
-        # print distance
-    if 16.0 < distance < 20.0 :
+    print distance
+    if 20.0 < distance < 25.0 :
         return True
     return False
         #     return True #pick up the can.
@@ -62,7 +62,7 @@ def talker(distance):
         break
 
 
-cap = cv2.VideoCapture(0) #1 for webcam
+cap = cv2.VideoCapture(1) #1 for webcam
 cap.set(3,400)
 cap.set(4,300)
 
