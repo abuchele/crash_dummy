@@ -89,7 +89,7 @@ doMask = True # set to True if you want to do the red mask, otherwise False
 while(True):
 
     ret, img = cap.read()
-    
+
     if doMask:
         img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
