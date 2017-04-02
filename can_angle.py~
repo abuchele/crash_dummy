@@ -18,21 +18,25 @@ def detect(img):
     return rects, img
 
 def box(rects, img):
-    xbig = 0
+    xbig = 0 # stores the biggest box x length
+    # variables to store biggest box's positions
     xf1 = 0
     xf2 = 0
-    yf1 = 0 
-    yf2 = 0 
+    yf1 = 0
+    yf2 = 0
+    # look for the biggest box
     for x1, y1, x2, y2 in rects:
 	if (x2-x1) > xbig :
 		xbig = x2 - x1
-		xf1=x1 
-		xf2=x2
-		yf1=y1
-		yf2=y2
+		xf1 = x1
+		xf2 = x2
+		yf1 = y1
+		yf2 = y2
+    # draw line and box for can.
     cv2.rectangle(img, (xf1, yf1), (xf2, yf2), (127, 255, 2), 2)
-    angle = (xf1 + (xf2-xf1)/2)/320.0 * 63 - 31.5
     cv2.line(img,((xf1+xf2)/2,0),((xf1+xf2)/2,320),(255,255,255),2)
+
+    angle = (xf1 + (xf2-xf1)/2)/320.0 * 63 - 31.5
     return angle
 
 def talker(coke_can):
@@ -45,18 +49,19 @@ def talker(coke_can):
         break
 
 cap = cv2.VideoCapture(0)
+#Set resolution.
 cap.set(4,300)
 cap.set(3,400)
-
+# twist info to be published into "can_vel"
 twist = Twist()
 
 
 
 while(True):
-   
+
     ret, img = cap.read()
-    img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)  
-  
+    img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
     # lower mask (0-10)
     lower_red = np.array([0,160,150])
     upper_red = np.array([10,255,255])
@@ -66,7 +71,7 @@ while(True):
     lower_red = np.array([170,160,150])
     upper_red = np.array([180,255,255])
     mask1 = cv2.inRange(img_hsv, lower_red, upper_red)
-    	
+
     # join my masks
     mask = mask0 + mask1
 
@@ -81,7 +86,7 @@ while(True):
 
     if len(rects) == 0:
         try:
-	    pass
+        #if does not contain any rect, return 0 for vel and angle
             twist.angular.z = 0.0
             twist.linear.x = 0.0
             talker(twist)
@@ -90,14 +95,15 @@ while(True):
         pass
     else:
         angle = box(rects, output_img)
-	print ("angle:", angle);
+        print ("angle:", angle);
         try:
             pass
- 	    twist.angular.z = (angle/180.0)*3.142
-            twist.linear.x = 0.1
+            # set angle(in radians)
+        	twist.angular.z = (angle/180.0)*3.142
+            twist.linear.x = 0.1 # change vel if required, 0.1 is just for testing
             talker(twist)
-        except rospy.ROSInterruptException:
-            pass
+            except rospy.ROSInterruptException:
+                pass
 
     cv2.imshow("frame", output_img)
     if(cv2.waitKey(1) & 0xFF == ord('q')):
