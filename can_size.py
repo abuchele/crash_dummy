@@ -4,7 +4,8 @@ import numpy as np
 import cv2
 import rospy
 from std_msgs.msg import Bool
-
+from geometry_msgs.msg import Twist
+from std_msgs.msg import Int8
 
 def detect(img):
     cascade = cv2.CascadeClassifier("cascade.xml")
@@ -17,6 +18,11 @@ def detect(img):
 
 def box(rects, img):
     max_area = 0
+    xbig = 0
+    xf1 = 0
+    xf2 = 0
+    yf1 = 0 
+    yf2 = 0 
     biggest_rect = []
     for x1, y1, x2, y2 in rects:
         area = abs(x1-x2) * abs(y1-y2)
@@ -25,8 +31,10 @@ def box(rects, img):
             biggest_rect = [x1, y1, x2, y2]
 
     cv2.rectangle(img, (x1, y1), (x2, y2), (127, 255, 0), 2)
-    return biggest_rect
-    #cv2.imwrite('one.jpg', img);
+    angle = (xf1 + (xf2-xf1)/2)/320.0 * 63 - 31.5
+    cv2.line(img,((xf1+xf2)/2,0),((xf1+xf2)/2,320),(255,255,255),2)
+    return [biggest_rect, angle]
+
 
 def distance(rect, img):
     #cans have height of 10.47 cm and width of 5.24 cm
@@ -41,8 +49,8 @@ def distance(rect, img):
     y2 = rect[3]
     height = abs(y1-y2)
     distance = (height_cm*focal_length)/height
-    print distance
-    if 20.0 < distance < 25.0 :
+        # print distance
+    if 16.0 < distance < 20.0 :
         return True
     return False
         #     return True #pick up the can.
@@ -50,26 +58,39 @@ def distance(rect, img):
 
 
 
-def talker(distance):
-    pub = rospy.Publisher('img_rec_distance', Bool, queue_size=10)
+def talker(coke_can,miss_stat):
+    pub = rospy.Publisher('img_rec/can_vel', Twist, queue_size=10)
+    pub2 = rospy.Publisher('img_rec/miss_stat', Int8, queue_size=10)
     rospy.init_node('img_rec', anonymous=True)
     #rospy.init_node('img_rec_distance', anonymous=True)
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
-        msg = distance % rospy.get_time()
-        rospy.loginfo(msg)
-        pub.publish(msg)
+        rospy.loginfo(coke_can)
+        pub.publish(coke_can)
+        msg.data = miss_stat;
+        pub2.publish(msg)
         break
 
+def talker_miss_stat(miss_stat):
+    pub2 = rospy.Publisher('/miss_stat', Int8, queue_size=10)
+    #rospy.init_node('img_rec_distance', anonymous=True)
+    rate = rospy.Rate(10) # 10hz
+    while not rospy.is_shutdown():
+        msg.data = miss_stat;
+        pub2.publish(msg)
+        break
 
-cap = cv2.VideoCapture(1) #1 for webcam
+cap = cv2.VideoCapture(0) #1 for webcam
 cap.set(3,400)
 cap.set(4,300)
-
+twist = Twist()
+miss_stat = 1
+msg = Int8()
 
 
 
 while(True):
+
     ret, img = cap.read()
     img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
@@ -94,16 +115,26 @@ while(True):
 
     if len(rects) == 0:
         try:
-            talker(0)
+            twist.angular.z = 0.0
+            twist.linear.x = 0.0
+            talker(twist,2)
+            miss_stat = 1
         except rospy.ROSInterruptException:
             pass
         pass
     else:
-        rect = box(rects, img_o)
-        action = distance(rect, img_o)
         try:
-            talker(action)
-            pass
+            [biggest_rect, angle] = box(rects, img_o)
+            print ("angle:", angle);
+            twist.angular.z = (angle/180.0)*3.142
+            twist.linear.x = 0.1
+            action = distance(biggest_rect, img_o)
+            if ((action == 1) & ((abs(angle) < 0.1))):
+                miss_stat = 3
+                talker(twist,miss_stat)
+            else:
+                miss_stat = 2
+                talker(twist,miss_stat)
         except rospy.ROSInterruptException:
             pass
 
