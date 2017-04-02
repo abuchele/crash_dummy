@@ -41,20 +41,22 @@ def distance(rect, img):
     y2 = rect[3]
     height = abs(y1-y2)
     distance = (height_cm*focal_length)/height
-    print distance
         # print distance
-        # if 16.0 < distance < 20.0
+    if 16.0 < distance < 20.0 :
+        return True
+    return False
         #     return True #pick up the can.
         #http://www.pyimagesearch.com/2015/01/19/find-distance-camera-objectmarker-using-python-opencv/
 
 
 
-def talker(coke_can):
-    pub = rospy.Publisher('img_rec', Bool, queue_size=10)
+def talker(distance):
+    pub = rospy.Publisher('img_rec_distance', Bool, queue_size=10)
     rospy.init_node('img_rec', anonymous=True)
+    #rospy.init_node('img_rec_distance', anonymous=True)
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
-        msg = coke_can % rospy.get_time()
+        msg = distance % rospy.get_time()
         rospy.loginfo(msg)
         pub.publish(msg)
         break
@@ -88,7 +90,7 @@ while(True):
     output_img = img.copy()
     output_img[np.where(mask==0)] = 0
 
-    rects, img = detect(output_img)
+    rects, img_o = detect(img)
 
     if len(rects) == 0:
         try:
@@ -97,15 +99,15 @@ while(True):
             pass
         pass
     else:
-        rect = box(rects, output_img)
-        distance(rect, output_img)
+        rect = box(rects, img_o)
+        action = distance(rect, img_o)
         try:
-            talker(1)
+            talker(action)
             pass
         except rospy.ROSInterruptException:
             pass
 
-    cv2.imshow("frame", output_img)
+    cv2.imshow("frame", img_o)
     k = cv2.waitKey(1) & 0xFF
     if k == ord('q'):
 	       break
