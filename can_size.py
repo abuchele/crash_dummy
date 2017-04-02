@@ -53,8 +53,6 @@ def distance(rect, img):
     if 16.0 < distance < 20.0 :
         return True
     return False
-        #     return True #pick up the can.
-        #http://www.pyimagesearch.com/2015/01/19/find-distance-camera-objectmarker-using-python-opencv/
 
 
 
@@ -62,7 +60,7 @@ def talker(coke_can,miss_stat):
     pub = rospy.Publisher('img_rec/can_vel', Twist, queue_size=10)
     pub2 = rospy.Publisher('img_rec/miss_stat', Int8, queue_size=10)
     rospy.init_node('img_rec', anonymous=True)
-    #rospy.init_node('img_rec_distance', anonymous=True)
+
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
         rospy.loginfo(coke_can)
@@ -87,38 +85,46 @@ twist = Twist()
 miss_stat = 1
 msg = Int8()
 
+doMask = True # set to True if you want to do the red mask, otherwise False
 
 
 while(True):
 
     ret, img = cap.read()
-    img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-    # lower mask (0-10)
-    lower_red = np.array([0,160,50])
-    upper_red = np.array([10,255,255])
-    mask0 = cv2.inRange(img_hsv, lower_red, upper_red)
+    if doMask:
+        img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-    # upper mask (170-180)
-    lower_red = np.array([170,160,50])
-    upper_red = np.array([180,255,255])
-    mask1 = cv2.inRange(img_hsv, lower_red, upper_red)
+        # lower mask (0-10)
+        lower_red = np.array([0,160,50])
+        upper_red = np.array([10,255,255])
+        mask0 = cv2.inRange(img_hsv, lower_red, upper_red)
 
-    # join my masks
-    mask = mask0+mask1
+        # upper mask (170-180)
+        lower_red = np.array([170,160,50])
+        upper_red = np.array([180,255,255])
+        mask1 = cv2.inRange(img_hsv, lower_red, upper_red)
 
-    # set my output img to zero everywhere except my mask
-    output_img = img.copy()
-    output_img[np.where(mask==0)] = 0
+        # join masks
+        mask = mask0+mask1
 
-    rects, img_o = detect(img)
+        # set output img to zero everywhere except mask
+        output_img = img.copy()
+        output_img[np.where(mask==0)] = 0
+
+    else:
+        output_img = img.copy()
+
+    rects, img_o = detect(output_img)
 
     if len(rects) == 0:
         try:
             twist.angular.z = 0.0
             twist.linear.x = 0.0
-            talker(twist,2)
+
             miss_stat = 1
+            talker(twist,miss_stat)
+
         except rospy.ROSInterruptException:
             pass
         pass
@@ -129,7 +135,9 @@ while(True):
             twist.angular.z = (angle/180.0)*3.142
             twist.linear.x = 0.1
             action = distance(biggest_rect, img_o)
-            if ((action == 1) & ((abs(angle) < 0.1))):
+
+            if ((action) & ((abs(angle) < 0.1))):
+
                 miss_stat = 3
                 talker(twist,miss_stat)
             else:
