@@ -25,6 +25,13 @@ def box(rects, img):
     yf2 = 0 
     biggest_rect = []
     for x1, y1, x2, y2 in rects:
+        if (x2-x1) > xbig :
+            xbig = x2 - x1
+            xf1=x1 
+            xf2=x2
+            yf1=y1
+            yf2=y2
+    for x1, y1, x2, y2 in rects:
         area = abs(x1-x2) * abs(y1-y2)
         if abs(x1-x2) * abs(y1-y2) > max_area:
             max_area = area
@@ -84,7 +91,7 @@ twist = Twist()
 miss_stat = 1
 msg = Int8()
 
-doMask = True # set to True if you want to do the red mask, otherwise False
+doMask = False # set to True if you want to do the red mask, otherwise False
 
 while(True):
 
