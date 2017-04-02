@@ -1,0 +1,42 @@
+/home/cgoh/Downloads/clion-2016.3.2/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/cgoh/catkin_ws/src/crash_dummy
+CMake Error at //catkinConfig.cmake:20 (include):
+  include could not find load file:
+
+    //all.cmake
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (find_package)
+
+
+CMake Warning at //catkinConfig.cmake:76 (find_package):
+  Could not find a package configuration file provided by "roscpp" with any
+  of the following names:
+
+    roscppConfig.cmake
+    roscpp-config.cmake
+
+  Add the installation prefix of "roscpp" to CMAKE_PREFIX_PATH or set
+  "roscpp_DIR" to a directory containing one of the above files.  If "roscpp"
+  provides a separate development package or SDK, be sure it has been
+  installed.
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (find_package)
+
+
+-- Could not find the required component 'roscpp'. The following CMake error indicates that you either need to install the package with the same name or change your environment so that it can be found.
+CMake Error at //catkinConfig.cmake:83 (find_package):
+  Could not find a package configuration file provided by "roscpp" with any
+  of the following names:
+
+    roscppConfig.cmake
+    roscpp-config.cmake
+
+  Add the installation prefix of "roscpp" to CMAKE_PREFIX_PATH or set
+  "roscpp_DIR" to a directory containing one of the above files.  If "roscpp"
+  provides a separate development package or SDK, be sure it has been
+  installed.
+Call Stack (most recent call first):
+  CMakeLists.txt:8 (find_package)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/cgoh/catkin_ws/src/crash_dummy/cmake-build-debug/CMakeFiles/CMakeOutput.log".
