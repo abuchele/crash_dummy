@@ -60,6 +60,7 @@ def talker(coke_can,miss_stat):
     pub = rospy.Publisher('img_rec/can_vel', Twist, queue_size=10)
     pub2 = rospy.Publisher('img_rec/miss_stat', Int8, queue_size=10)
     rospy.init_node('img_rec', anonymous=True)
+
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
         rospy.loginfo(coke_can)
@@ -83,12 +84,14 @@ cap.set(4,300)
 twist = Twist()
 miss_stat = 1
 msg = Int8()
+
 doMask = True # set to True if you want to do the red mask, otherwise False
+
 
 while(True):
 
     ret, img = cap.read()
-    
+
     if doMask:
         img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
@@ -118,8 +121,10 @@ while(True):
         try:
             twist.angular.z = 0.0
             twist.linear.x = 0.0
+
             miss_stat = 1
             talker(twist,miss_stat)
+
         except rospy.ROSInterruptException:
             pass
         pass
@@ -130,7 +135,9 @@ while(True):
             twist.angular.z = (angle/180.0)*3.142
             twist.linear.x = 0.1
             action = distance(biggest_rect, img_o)
+
             if ((action) & ((abs(angle) < 0.1))):
+
                 miss_stat = 3
                 talker(twist,miss_stat)
             else:
