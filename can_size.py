@@ -57,7 +57,7 @@ def distance(rect, img):
     height = abs(y1-y2)
     distance = (height_cm*focal_length)/height
     print distance
-    if 16.0 < distance < 20.0 :
+    if 18.0 < distance < 22.0 :
         return True
     return False
 
