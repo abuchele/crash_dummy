@@ -21,12 +21,12 @@ def box(rects, img):
     xbig = 0
     xf1 = 0
     xf2 = 0
-    yf1 = 0 
-    yf2 = 0 
+    yf1 = 0
+    yf2 = 0
     for x1, y1, x2, y2 in rects:
 	if (x2-x1) > xbig :
 		xbig = x2 - x1
-		xf1=x1 
+		xf1=x1
 		xf2=x2
 		yf1=y1
 		yf2=y2
@@ -53,10 +53,10 @@ twist = Twist()
 
 
 while(True):
-   
+
     ret, img = cap.read()
-    img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)  
-  
+    img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
     # lower mask (0-10)
     lower_red = np.array([0,160,150])
     upper_red = np.array([10,255,255])
@@ -66,7 +66,7 @@ while(True):
     lower_red = np.array([170,160,150])
     upper_red = np.array([180,255,255])
     mask1 = cv2.inRange(img_hsv, lower_red, upper_red)
-    	
+
     # join my masks
     mask = mask0 + mask1
 
