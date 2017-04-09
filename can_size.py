@@ -25,6 +25,13 @@ def box(rects, img):
     yf2 = 0 
     biggest_rect = []
     for x1, y1, x2, y2 in rects:
+        if (x2-x1) > xbig :
+            xbig = x2 - x1
+            xf1=x1 
+            xf2=x2
+            yf1=y1
+            yf2=y2
+    for x1, y1, x2, y2 in rects:
         area = abs(x1-x2) * abs(y1-y2)
         if abs(x1-x2) * abs(y1-y2) > max_area:
             max_area = area
@@ -49,11 +56,10 @@ def distance(rect, img):
     y2 = rect[3]
     height = abs(y1-y2)
     distance = (height_cm*focal_length)/height
-        # print distance
-    if 16.0 < distance < 20.0 :
+    print distance
+    if 18.0 < distance < 22.0 :
         return True
     return False
-
 
 
 def talker(coke_can,miss_stat):
@@ -85,8 +91,7 @@ twist = Twist()
 miss_stat = 1
 msg = Int8()
 
-doMask = True # set to True if you want to do the red mask, otherwise False
-
+doMask = False # set to True if you want to do the red mask, otherwise False
 
 while(True):
 
@@ -121,23 +126,19 @@ while(True):
         try:
             twist.angular.z = 0.0
             twist.linear.x = 0.0
-
             miss_stat = 1
             talker(twist,miss_stat)
-
         except rospy.ROSInterruptException:
             pass
         pass
     else:
         try:
             [biggest_rect, angle] = box(rects, img_o)
-            print ("angle:", angle);
             twist.angular.z = (angle/180.0)*3.142
             twist.linear.x = 0.1
             action = distance(biggest_rect, img_o)
 
             if ((action) & ((abs(angle) < 0.1))):
-
                 miss_stat = 3
                 talker(twist,miss_stat)
             else:

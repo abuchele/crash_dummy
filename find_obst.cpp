@@ -12,7 +12,6 @@
 */
 
 
-
 #include <string>
 #include <iostream>
 #include <vector>
@@ -28,11 +27,11 @@
 sensor_msgs::LaserScan scan;
 sensor_msgs::LaserScan filtered_scan;
 
-// ros::Publisher pub_arb;
 ros::Publisher obstacle_flag;
 ros::Publisher lidar_vel;
 
 geometry_msgs::Twist twist;
+std_msgs::Bool flag;
 
 void getLIDAR(const sensor_msgs::LaserScan lidar_scan)
 ;
@@ -40,7 +39,7 @@ void getLIDAR(const sensor_msgs::LaserScan lidar_scan)
 void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
 {
     // set default speed
-    twist.linear.z = VELOCITY;
+    twist.linear.x = VELOCITY;
     twist.angular.z = 0; // straight
 
     scan = lidar_scan;
@@ -48,21 +47,24 @@ void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
 
     //always turn right if middle blocked (< THRESHOLD )
     if(scan.ranges[number_of_ranges/2]<THRESHOLD) {
-      // turn to the left
-      twist.angular.z = 3.142 / 12;
-      obstacle_flag.publish(false);
-      lidar_vel.publish(twist);
-      ROS_INFO("Obstacle detected at centre, moving left");
+        // turn to the left
+        twist.angular.z = 3.142 / 12;
+        flag.data =  0;
+        obstacle_flag.publish(flag);
+        lidar_vel.publish(twist);
+        ROS_INFO("Obstacle detected at centre, moving left");
     }
     else{
-      ROS_INFO("MOVING STRAIGHT");
-      obstacle_flag.publish(true);
-      lidar_vel.publish(twist);
+        ROS_INFO("MOVING STRAIGHT");
+        flag.data = 0;
+        obstacle_flag.publish(flag);
+        lidar_vel.publish(twist);
 
     }
 
     return;
 }
+
 
 int main(int argc, char **argv)
 {
