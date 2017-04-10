@@ -93,13 +93,13 @@ void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
 		ROS_INFO("Backward");
 		cmd_array.data.assign(backward, backward+22);
 	}
-	else if (forward_distance < .3)
+	/*else if (forward_distance < .3)
 	{
 		// Stop
 		flag.data=1; //avoiding obstacles
 		ROS_INFO("Stop");
 		cmd_array.data.assign(stop, stop+22);
-	}
+	} */
 	else if (forward_distance < 0.7)
     {
         flag.data = 1;

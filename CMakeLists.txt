@@ -192,3 +192,6 @@ target_link_libraries(random ${catkin_LIBRARIES})
 add_executable(find_obst find_obst.cpp)
 target_link_libraries(find_obst ${catkin_LIBRARIES})
 
+add_executable(mid_brain Mid_Brain.cpp)
+target_link_libraries(mid_brain ${catkin_LIBRARIES})
+
