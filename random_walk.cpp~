@@ -14,7 +14,7 @@ ros::init(argc, argv, "walk");
 
 ros::NodeHandle n;
 
-ros::Publisher chatter_pub = n.advertise<geometry_msgs::Twist>("rwk/cmd_vel", 1000);
+ros::Publisher chatter_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 1000);
 
 ros::Rate loop_rate(10);
 

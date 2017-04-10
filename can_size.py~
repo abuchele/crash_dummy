@@ -63,7 +63,7 @@ def distance(rect, img):
 
 
 def talker(coke_can,miss_stat):
-    pub = rospy.Publisher('img_rec/cmd_vel', Twist, queue_size=10)
+    pub = rospy.Publisher('img_rec/can_vel', Twist, queue_size=10)
     pub2 = rospy.Publisher('img_rec/miss_stat', Int8, queue_size=10)
     rospy.init_node('img_rec', anonymous=True)
 
