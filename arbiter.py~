@@ -27,7 +27,7 @@ class arbiter(object):
         rospy.Subscriber('img_rec/cmd_vel', Twist, self.can_vel_cb)
         rospy.Subscriber('/rwk/cmd_vel', Twist, self.rwk_vel_cb)
         rospy.Subscriber('/obst/cmd_vel', Twist, self.obst_vel_cb)
-        rospy.Subscriber('/obst/flag', Int8, self.update_flag) #whether or not we are avoiding an obstacle!
+        rospy.Subscriber('/obst/flag', Bool, self.update_flag) #whether or not we are avoiding an obstacle!
 	
 	rospy.Subscriber('img_rec/miss_stat', Int8, self.update_status)
         rospy.Subscriber('/miss_stat', Int8, self.update_status)

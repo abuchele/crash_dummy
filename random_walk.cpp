@@ -31,10 +31,9 @@ while (ros::ok() && run_time.toSec() < timeS)
 	geometry_msgs::Twist msg;
 
 	srand (time(NULL));
-	z_rand = rand() % 201;
+	z1 = rand() % 100;
 
 
-	z1 = z_rand - 100;
 
 	msg.linear.x = 30;
 	msg.angular.z = z1;
