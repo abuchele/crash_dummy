@@ -31,12 +31,12 @@ while (ros::ok() && run_time.toSec() < timeS)
 	geometry_msgs::Twist msg;
 
 	srand (time(NULL));
-	z1 = rand() % 100;
+	z1 = rand() % 201;
 
 
 
 	msg.linear.x = 30;
-	msg.angular.z = z1;
+	msg.angular.z = z1 -100;
 
 	chatter_pub.publish(msg);
 
