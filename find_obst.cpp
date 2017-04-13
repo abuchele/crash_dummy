@@ -21,7 +21,7 @@
 #include "geometry_msgs/Twist.h"
 
 #define THRESHOLD 0.3 // THRESHOLD FOR CLEAR
-#define VELOCITY 1
+#define VELOCITY 25
 #define ROBO_WIDTH 0.5 // in meters
 
 sensor_msgs::LaserScan scan;
@@ -32,7 +32,7 @@ ros::Publisher lidar_vel;
 
 geometry_msgs::Twist twist;
 std_msgs::Bool flag;
-int smallest;
+float smallest;
 float angle_val;
 
 void getLIDAR(const sensor_msgs::LaserScan lidar_scan)
@@ -69,64 +69,44 @@ void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
     // Calculate output array using some portion of scan -> set "forward distance" to the smallest value -> the closest object.
     for (int i = number_of_ranges/3; i<2*number_of_ranges/3;i++)
     {
-        if ((forward_distance > filtered_scan.ranges[i]) && (filtered_scan.ranges[i] >= 0.1))
+        if ((forward_distance > filtered_scan.ranges[i]) && (filtered_scan.ranges[i] >= 0.1)) {
             forward_distance = filtered_scan.ranges[i];
             smallest = i;
+        }
     }
 
     if (forward_distance < .2)
     {
         // Move backward
         flag.data=1; //avoiding obstacles
-        ROS_INFO("Backward");
         twist.angular.z = 0; //go straight backwards
-        twist.linear.x = -30; //back up, slowly
+        twist.linear.x = -20; //back up, slowly
     }
 
     else if (forward_distance < 0.7)
     {
         flag.data = 1;
-        ROS_INFO("Avoid");
-        angle_val = smallest/number_of_ranges;
+        angle_val = (smallest)/ (number_of_ranges);
         if (angle_val < 0.5) {
             //turn left
-            ROS_INFO("Left");
-            ROS_INFO("%f", angle_val);
-            ROS_INFO("%d", smallest);
-            ROS_INFO("%d", number_of_ranges);
-            ROS_INFO("%f", scan.ranges[340]);
+            twist.angular.z = -50;
         }
         else if (angle_val >= 0.5){
             //turn right
-            ROS_INFO("Right");
+            twist.angular.z = 50;
         }
 
     }
     else {
         // Move forward
         flag.data=0; //not avoiding obstacles
-        ROS_INFO("Forward");
         twist.angular.z = 0; //go straight forward
         twist.linear.x = 30; //drive forward
         //ROS_INFO_STREAM(cmd_array);
     }
+    obstacle_flag.publish(flag);
+    lidar_vel.publish(twist);
 
-    //always turn right if middle blocked (< THRESHOLD )
-    if(scan.ranges[number_of_ranges/2]<THRESHOLD) {
-        // turn to the left
-        twist.angular.z = 3.142 / 12;
-        flag.data =  0;
-        obstacle_flag.publish(flag);
-        lidar_vel.publish(twist);
-        ROS_INFO("Obstacle detected at centre, moving left");
-    }
-    else{
-        ROS_INFO("MOVING STRAIGHT");
-        flag.data = 0;
-        obstacle_flag.publish(flag);
-        lidar_vel.publish(twist);
-
-    }
     forward_distance = 100.0;
     return;
 }
