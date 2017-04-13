@@ -186,13 +186,14 @@ catkin_package(
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-add_executable(random random_walk.cpp)
-target_link_libraries(random ${catkin_LIBRARIES})
+add_executable(fb_heading_calc fb_heading_calc.cpp )
+target_link_libraries(fb_heading_calc ${catkin_LIBRARIES})
+
+add_executable(mid_brain Mid_Brain.cpp)
+target_link_libraries(mid_brain ${catkin_LIBRARIES})
 
 add_executable(find_obst find_obst.cpp)
 target_link_libraries(find_obst ${catkin_LIBRARIES})
 
-
-
-
-
+#add_executable(test_range test_ranges.cpp)
+#target_link_libraries(test_range ${catkin_LIBRARIES})
