@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+
+#created by Anna, Max, and ChongSwee in 3/2017
+
 #opens up a webcam feed so you can then test your classifer in real time
 #using detectMultiScale
 import numpy as np

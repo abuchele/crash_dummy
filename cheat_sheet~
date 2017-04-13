@@ -8,8 +8,6 @@ rosrun rosserial_python serial_node.py /dev/ttyACM0
 
 
 
-
-
 to connect to odroid:
 
 nmap (your IP)/24 
