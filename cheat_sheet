@@ -1,0 +1,23 @@
+rosserial:
+
+upload to arduino
+
+roscore
+rosrun 
+rosrun rosserial_python serial_node.py /dev/ttyACM0
+
+
+
+
+
+to connect to odroid:
+
+nmap (your IP)/24 
+
+example: nmap 10.42.0.0/24
+
+keep running this until you get something back which says ....(2 hosts up), 
+it should give you the odroids ip
+
+ssh odroid@(odroids ip)
+then it will ask you for password, which is odroid

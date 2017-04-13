@@ -192,7 +192,9 @@ target_link_libraries(random ${catkin_LIBRARIES})
 add_executable(find_obst find_obst.cpp)
 target_link_libraries(find_obst ${catkin_LIBRARIES})
 
+add_executable(can_size can_size.py)
 
+add_executable(arbiter arbiter.py)
 
 
 
