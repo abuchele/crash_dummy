@@ -66,8 +66,8 @@ def distance(rect, img):
     distance = (height_cm*focal_length)/height
     print distance
     if 18.0 < distance < 22.0 :
-        return True
-    return False
+        return [True, distance]
+    return [False, distance]
 
 
 def talker(coke_can,miss_stat):
@@ -142,11 +142,17 @@ while(True):
             [biggest_rect, angle] = box(rects, img_o)
             twist.angular.z = (angle/180.0)*100
             twist.linear.x = 20
-            action = distance(biggest_rect, img_o)
+            [action, distance] = distance(biggest_rect, img_o)
 
-            if ((action) & ((abs(angle) < 0.1))):
-                miss_stat = 3
+            if (action):
+                if ((abs(angle) < 0.1)):
+                    miss_stat = 3
+                else:
+                    miss_stat = 2
+                    twist.linear.x = -20
+                    twist.angular.z = 0
                 talker(twist,miss_stat)
+                rospy.sleep(3.)
             else:
                 miss_stat = 2
                 talker(twist,miss_stat)
