@@ -14,7 +14,7 @@ ros::init(argc, argv, "walk");
 
 ros::NodeHandle n;
 
-ros::Publisher chatter_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 1000);
+ros::Publisher chatter_pub = n.advertise<geometry_msgs::Twist>("rwk/cmd_vel", 1000);
 
 ros::Rate loop_rate(10);
 
@@ -31,13 +31,12 @@ while (ros::ok() && run_time.toSec() < timeS)
 	geometry_msgs::Twist msg;
 
 	srand (time(NULL));
-	z_rand = rand() % 201;
+	z1 = rand() % 201;
 
 
-	z1 = z_rand - 100;
 
 	msg.linear.x = 30;
-	msg.angular.z = z1;
+	msg.angular.z = z1 -100;
 
 	chatter_pub.publish(msg);
 

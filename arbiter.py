@@ -5,7 +5,7 @@
 #as well as the correct path.
 
 import rospy
-from std_msgs.msg import Int8MultiArray, Int8
+from std_msgs.msg import Int8MultiArray, Int8, Bool
 from geometry_msgs.msg import Twist
 import numpy as np
 
@@ -21,13 +21,15 @@ class arbiter(object):
         self.rwk_vel_z = 0
         self.obst_vel_x = 0
         self.obst_vel_z = 0
-        self.miss_stat = -1
+        self.miss_stat = 1
         self.msg = Twist()
 
-        rospy.Subscriber('/can_vel', Twist, self.can_vel_cb)
-        rospy.Subscriber('/rwk_vel', Twist, self.rwk_vel_cb)
-        rospy.Subscriber('/obst_vel', Twist, self.obst_vel_cb)
-        rospy.Subscriber('/obst/avoid', Int8, self.update_flag) #whether or not we are avoiding an obstacle!
+        rospy.Subscriber('/img_rec/cmd_vel', Twist, self.can_vel_cb)
+        rospy.Subscriber('/rwk/cmd_vel', Twist, self.rwk_vel_cb)
+        rospy.Subscriber('/obst/cmd_vel', Twist, self.obst_vel_cb)
+        rospy.Subscriber('/obst/flag', Bool, self.update_flag) #whether or not we are avoiding an obstacle!
+	
+        rospy.Subscriber('img_rec/miss_stat', Int8, self.update_status)
         rospy.Subscriber('/miss_stat', Int8, self.update_status)
 
         self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
@@ -37,26 +39,26 @@ class arbiter(object):
         self.flag = value.data
 
     def status_pub(self):
-        self.msg = Twist()
         if self.miss_stat == 0:
-            msg.linear.x = 0
-            msg.angular.z = 0 #mission status = 0: STOP
+            self.msg.linear.x = 0
+            self.msg.angular.z = 0 #mission status = 0: STOP
         elif self.miss_stat == 1: #random walk
             if self.flag:
-                msg.linear.x = self.obst_vel_x
-                msg.angular.z = self.obst_vel_z
+                self.msg.linear.x = self.obst_vel_x
+                self.msg.angular.z = self.obst_vel_z
             else:
-                msg.linear.x = self.rwk_vel_x
-                msg.angular.z = self.rwk_vel_z
+                self.msg.linear.x = self.rwk_vel_x
+                self.msg.angular.z = self.rwk_vel_z
         elif self.miss_stat == 2: #drive to can
-            msg.linear.x = self.can_vel_x
-            msg.angular.z = self.can_vel_z
+            self.msg.linear.x = self.can_vel_x
+            self.msg.angular.z = self.can_vel_z
         elif self.miss_stat == 3: #pick up can
-            msg.linear.x = 0
-            msg.angular.z = 0
+            self.msg.linear.x = 0
+            self.msg.angular.z = 0
         elif self.miss_stat == -1: #we're just starting up, so wait
-            msg.linear.x = 0
-            msg.angular.z = 0
+            self.msg.linear.x = 0
+            self.msg.angular.z = 0
+            self.miss_stat = 1
         else:
             pass
             #go home
@@ -77,6 +79,7 @@ class arbiter(object):
         self.miss_stat = value.data
 
     def run(self):
+        self.status_pub()
         self.cmd_vel_pub.publish(self.msg)
         self.miss_stat_pub.publish(self.miss_stat)
 

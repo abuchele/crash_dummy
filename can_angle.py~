@@ -86,6 +86,7 @@ while(True):
 
     if len(rects) == 0:
         try:
+	    pass
         #if does not contain any rect, return 0 for vel and angle
             twist.angular.z = 0.0
             twist.linear.x = 0.0
@@ -96,14 +97,14 @@ while(True):
     else:
         angle = box(rects, output_img)
         print ("angle:", angle);
-        try:
-            pass
-            # set angle(in radians)
-        	twist.angular.z = (angle/180.0)*3.142
-            twist.linear.x = 0.1 # change vel if required, 0.1 is just for testing
-            talker(twist)
-            except rospy.ROSInterruptException:
+            try:
                 pass
+                # set angle(in radians)
+        	    twist.angular.z = (angle/180.0)*3.142
+                twist.linear.x = 0.1 # change vel if required, 0.1 is just for testing
+                talker(twist)
+                except rospy.ROSInterruptException:
+                        pass
 
     cv2.imshow("frame", output_img)
     if(cv2.waitKey(1) & 0xFF == ord('q')):

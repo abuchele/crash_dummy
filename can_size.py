@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+
+#created by Anna, Max, and ChongSwee in 3/2017
+
 #opens up a webcam feed so you can then test your classifer in real time
 #using detectMultiScale
 import numpy as np
@@ -7,8 +11,16 @@ from std_msgs.msg import Bool
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Int8
 
+
+
+doMask = False # set to True if you want to do the red mask, otherwise False
+
+
 def detect(img):
-    cascade = cv2.CascadeClassifier("cascade.xml")
+    if doMask:
+        cascade = cv2.CascadeClassifier("cascade0.xml") #use the classifier that works with the mask
+    else:
+        cascade = cv2.CascadeClassifier("cascade.xml")
     rects = cascade.detectMultiScale(img, 1.3, 4, cv2.cv.CV_HAAR_SCALE_IMAGE, (20,20))
 
     if len(rects) == 0:
@@ -25,13 +37,20 @@ def box(rects, img):
     yf2 = 0 
     biggest_rect = []
     for x1, y1, x2, y2 in rects:
+        if (x2-x1) > xbig :
+            xbig = x2 - x1
+            xf1=x1 
+            xf2=x2
+            yf1=y1
+            yf2=y2
+    for x1, y1, x2, y2 in rects:
         area = abs(x1-x2) * abs(y1-y2)
         if abs(x1-x2) * abs(y1-y2) > max_area:
             max_area = area
             biggest_rect = [x1, y1, x2, y2]
 
     cv2.rectangle(img, (x1, y1), (x2, y2), (127, 255, 0), 2)
-    angle = (xf1 + (xf2-xf1)/2)/320.0 * 63 - 31.5
+    angle = ((xf1 + (xf2-xf1)/2)/320.0) * 63 - 31.5
     cv2.line(img,((xf1+xf2)/2,0),((xf1+xf2)/2,320),(255,255,255),2)
     return [biggest_rect, angle]
 
@@ -49,15 +68,14 @@ def distance(rect, img):
     y2 = rect[3]
     height = abs(y1-y2)
     distance = (height_cm*focal_length)/height
-        # print distance
-    if 16.0 < distance < 20.0 :
-        return True
-    return False
-
+    print distance
+    if 18.0 < distance < 22.0 :
+        return [True, distance]
+    return [False, distance]
 
 
 def talker(coke_can,miss_stat):
-    pub = rospy.Publisher('img_rec/can_vel', Twist, queue_size=10)
+    pub = rospy.Publisher('img_rec/cmd_vel', Twist, queue_size=10)
     pub2 = rospy.Publisher('img_rec/miss_stat', Int8, queue_size=10)
     rospy.init_node('img_rec', anonymous=True)
 
@@ -78,15 +96,12 @@ def talker_miss_stat(miss_stat):
         pub2.publish(msg)
         break
 
-cap = cv2.VideoCapture(0) #1 for webcam
+cap = cv2.VideoCapture(1) #1 for webcam
 cap.set(3,400)
 cap.set(4,300)
 twist = Twist()
 miss_stat = 1
 msg = Int8()
-
-doMask = True # set to True if you want to do the red mask, otherwise False
-
 
 while(True):
 
@@ -121,25 +136,27 @@ while(True):
         try:
             twist.angular.z = 0.0
             twist.linear.x = 0.0
-
             miss_stat = 1
             talker(twist,miss_stat)
-
         except rospy.ROSInterruptException:
             pass
         pass
     else:
         try:
             [biggest_rect, angle] = box(rects, img_o)
-            print ("angle:", angle);
-            twist.angular.z = (angle/180.0)*3.142
-            twist.linear.x = 0.1
-            action = distance(biggest_rect, img_o)
+            twist.angular.z = (angle/180.0)*100
+            twist.linear.x = 20
+            [action, distance] = distance(biggest_rect, img_o)
 
-            if ((action) & ((abs(angle) < 0.1))):
-
-                miss_stat = 3
+            if (action):
+                if ((abs(angle) < 0.1)):
+                    miss_stat = 3
+                else:
+                    miss_stat = 2
+                    twist.linear.x = -20
+                    twist.angular.z = 0
                 talker(twist,miss_stat)
+                rospy.sleep(3.)
             else:
                 miss_stat = 2
                 talker(twist,miss_stat)
