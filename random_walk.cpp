@@ -23,7 +23,12 @@ ros::Duration run_time;
 
 int timeS = 20;
 
-while (ros::ok() && run_time.toSec() < timeS)
+int counterRand = 0;
+int counterSpin = 0;
+
+while (true){
+
+while (counterRand < (timeS*2))
 {
 	int z_rand, z1;
 
@@ -40,10 +45,25 @@ while (ros::ok() && run_time.toSec() < timeS)
 
 	chatter_pub.publish(msg);
 
-	ros::spinOnce(); 
 	loop_rate.sleep();
 
 	ros::Duration run_time = ros::Time::now() - begin;
+	counterRand = counterRand + 1;
+}
+
+while (counterSpin < timeS){
+	geometry_msgs::Twist msg;
+	msg.linear.x = 20;
+	msg.angular.z = -100;
+	chatter_pub.publish(msg);
+	loop_rate.sleep();
+	counterSpin = counterSpin +1;
+}
+counterRand = 0;
+counterSpin = 0;
+
+
+ros::spinOnce(); 
 }
 return 0;
 }
