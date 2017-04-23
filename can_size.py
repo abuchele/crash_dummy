@@ -14,13 +14,13 @@ from std_msgs.msg import Int8
 
 
 doMask = False # set to True if you want to do the red mask, otherwise False
+if doMask:
+    cascade = cv2.CascadeClassifier("cascade0.xml") #use the classifier that works with the mask
+else:
+    cascade = cv2.CascadeClassifier("cascade.xml")
 
 
 def detect(img):
-    if doMask:
-        cascade = cv2.CascadeClassifier("cascade0.xml") #use the classifier that works with the mask
-    else:
-        cascade = cv2.CascadeClassifier("cascade.xml")
     rects = cascade.detectMultiScale(img, 1.3, 4, cv2.cv.CV_HAAR_SCALE_IMAGE, (20,20))
 
     if len(rects) == 0:
@@ -50,7 +50,7 @@ def box(rects, img):
             biggest_rect = [x1, y1, x2, y2]
 
     cv2.rectangle(img, (x1, y1), (x2, y2), (127, 255, 0), 2)
-    angle = ((xf1 + (xf2-xf1)/2)/320.0) * 63 - 31.5
+    angle = (((xf1 + (xf2-xf1)/2)/320.0) * 63 - 33.5) 
     cv2.line(img,((xf1+xf2)/2,0),((xf1+xf2)/2,320),(255,255,255),2)
     return [biggest_rect, angle]
 
@@ -69,9 +69,9 @@ def distance(rect, img):
     height = abs(y1-y2)
     distance = (height_cm*focal_length)/height
     print distance
-    if 18.0 < distance < 22.0 :
-        return [True, distance]
-    return [False, distance]
+    if 15.0 < distance < 38.0 :
+        return True
+    return False
 
 
 def talker(coke_can,miss_stat):
@@ -144,19 +144,19 @@ while(True):
     else:
         try:
             [biggest_rect, angle] = box(rects, img_o)
-            twist.angular.z = (angle/180.0)*100
+            twist.angular.z = angle  #(angle/180.0)*100
             twist.linear.x = 20
-            [action, distance] = distance(biggest_rect, img_o)
+            action = distance(biggest_rect, img_o)
 
             if (action):
-                if ((abs(angle) < 0.1)):
+                if ((abs(angle) < 0.4)):
                     miss_stat = 3
                 else:
                     miss_stat = 2
                     twist.linear.x = -20
                     twist.angular.z = 0
                 talker(twist,miss_stat)
-                rospy.sleep(3.)
+
             else:
                 miss_stat = 2
                 talker(twist,miss_stat)
