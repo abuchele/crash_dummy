@@ -2,7 +2,7 @@
 <launch>
 
  <node name="serial_node" pkg="rosserial_python" type="serial_node.py">
-    <param name="port" value="/dev/ttyACM3"/>
+    <param name="port" value="/dev/ttyACM0"/>
     <param name="baud" value="57600"/>
   </node>
 
@@ -12,8 +12,6 @@
   <node name="find_obst" pkg="crash_dummy" type="find_obst"> </node>
 
   <node name="random" pkg="crash_dummy" type="random"> </node>
-
-  <node pkg="crash_dummy" name="can_size" type="can_size.py"> </node>
 
   <node pkg="crash_dummy" name="arbiter" type="arbiter.py"> </node>
 

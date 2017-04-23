@@ -13,8 +13,6 @@
 
   <node name="random" pkg="crash_dummy" type="random"> </node>
 
-  <node pkg="crash_dummy" name="can_size" type="can_size.py"> </node>
-
   <node pkg="crash_dummy" name="arbiter" type="arbiter.py"> </node>
 
 </launch>
