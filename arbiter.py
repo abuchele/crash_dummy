@@ -23,11 +23,13 @@ class arbiter(object):
         self.obst_vel_z = 0
         self.miss_stat = 1
         self.msg = Twist()
+        self.can_picked = False;
 
         rospy.Subscriber('/img_rec/cmd_vel', Twist, self.can_vel_cb)
         rospy.Subscriber('/rwk/cmd_vel', Twist, self.rwk_vel_cb)
         rospy.Subscriber('/obst/cmd_vel', Twist, self.obst_vel_cb)
         rospy.Subscriber('/obst/flag', Bool, self.update_flag) #whether or not we are avoiding an obstacle!
+        rospy.Subscriber('/can_picked', Bool, self.update_status)
 	
         rospy.Subscriber('img_rec/miss_stat', Int8, self.update_status)
         rospy.Subscriber('/miss_stat', Int8, self.update_status)
@@ -55,6 +57,9 @@ class arbiter(object):
         elif self.miss_stat == 3: #pick up can
             self.msg.linear.x = 0
             self.msg.angular.z = 0
+            if self.can_picked == True:
+                #dummy vals, but drive home
+                self.miss_stat = 4
         elif self.miss_stat == -1: #we're just starting up, so wait
             self.msg.linear.x = 0
             self.msg.angular.z = 0

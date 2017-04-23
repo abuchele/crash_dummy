@@ -35,7 +35,7 @@ while (ros::ok() && run_time.toSec() < timeS)
 
 
 
-	msg.linear.x = 30;
+	msg.linear.x = 20;
 	msg.angular.z = z1 -100;
 
 	chatter_pub.publish(msg);
