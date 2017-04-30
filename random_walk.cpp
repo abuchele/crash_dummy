@@ -57,7 +57,7 @@ while (counterSpin < timeS){
 	msg.angular.z = -30;
 	chatter_pub.publish(msg);
 	loop_rate.sleep();
-	counterSpin = counterSpin +1;
+	counterSpin = counterSpin +5;
 }
 counterRand = 0;
 counterSpin = 0;
