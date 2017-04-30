@@ -36,12 +36,12 @@ while (counterRand < (timeS*2))
 	geometry_msgs::Twist msg;
 
 	srand (time(NULL));
-	z1 = rand() % 201;
+	z1 = rand() % 101;
 
 
 
 	msg.linear.x = 20;
-	msg.angular.z = z1 -100;
+	msg.angular.z = z1 -50;
 
 	chatter_pub.publish(msg);
 
@@ -54,7 +54,7 @@ while (counterRand < (timeS*2))
 while (counterSpin < timeS){
 	geometry_msgs::Twist msg;
 	msg.linear.x = 20;
-	msg.angular.z = -100;
+	msg.angular.z = -30;
 	chatter_pub.publish(msg);
 	loop_rate.sleep();
 	counterSpin = counterSpin +1;
