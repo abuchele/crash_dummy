@@ -7,45 +7,64 @@
 #include "std_msgs/String.h"
 
 
+ros::Publisher cmd_vel_pub;
+
+ros::Time rstart;
+ros::Time sstart;
+
+ros::Duration cycle_time (10.0);
+ros::Duration spin_time (10.0);
+ros::Duration one_time (1.0);
+int random_counter = 0;
+bool spin = false;
+int spin_counter = 0;
+
+void one_random(){
+    int z1;
+    geometry_msgs::Twist msg;
+    srand (time(NULL));
+    z1 = rand() % 101;
+    msg.linear.x = 20;
+    msg.angular.z = z1 -50;
+    cmd_vel_pub.publish(msg);
+}
+
+void one_spin(){
+    geometry_msgs::Twist msg;
+    msg.linear.x = 20;
+    msg.angular.z = -30;
+    cmd_vel_pub.publish(msg);
+}
+
+
+void timerCallback(const ros::TimerEvent& event){
+    if (spin) {
+        one_spin();
+        spin_counter += 1;
+        if (spin_counter > 9){
+            spin_counter = 0;
+            spin = false;
+        }
+    }
+    else{
+        one_random();
+        random_counter += 1;
+        if (random_counter > 9){
+            random_counter = 0;
+            spin = true;
+        }
+    }
+}
+
+
 int main(int argc, char **argv)
 {
-
-ros::init(argc, argv, "walk");
-
-ros::NodeHandle n;
-
-ros::Publisher chatter_pub = n.advertise<geometry_msgs::Twist>("rwk/cmd_vel", 1000);
-
-ros::Rate loop_rate(10);
-
-ros::Time begin = ros::Time::now();
-ros::Duration run_time;
-
-int timeS = 20;
-
-while (ros::ok() && run_time.toSec() < timeS)
-{
-	int z_rand, z1;
-
-
-	geometry_msgs::Twist msg;
-
-	srand (time(NULL));
-	z1 = rand() % 201;
-
-
-
-	msg.linear.x = 30;
-	msg.angular.z = z1 -100;
-
-	chatter_pub.publish(msg);
-
-	ros::spinOnce(); 
-	loop_rate.sleep();
-
-	ros::Duration run_time = ros::Time::now() - begin;
-}
-return 0;
+    ros::init(argc, argv, "walk");
+    ros::NodeHandle n;
+    cmd_vel_pub = n.advertise<geometry_msgs::Twist>("rwk/cmd_vel", 1000);
+    ros::Timer timer = n.createTimer(ros::Duration(1.0), (const ros::TimerCallback &) timerCallback);
+    ros::spin();
+    return 0;
 }
 
 

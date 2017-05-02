@@ -1,0 +1,8 @@
+
+<launch>
+
+  <node name="find_obst" pkg="crash_dummy" type="find_obst"> </node>
+
+  <node name="random" pkg="crash_dummy" type="random"> </node>
+
+</launch>
