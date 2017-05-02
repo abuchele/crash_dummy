@@ -18,21 +18,30 @@ ros::Duration one_time (1.0);
 int random_counter = 0;
 bool spin = false;
 int spin_counter = 0;
+int zval;
+int xval;
 
 void one_random(){
     int z1;
     geometry_msgs::Twist msg;
     srand (time(NULL));
     z1 = rand() % 101;
-    msg.linear.x = 30;
-    msg.angular.z = z1 -50;
+    zval = z1 - 50;
+    if (abs(zval) > 20){
+        xval = 30;
+    }
+    else {
+        xval = 20;
+    }
+    msg.angular.z = zval;
+    msg.linear.x = xval;
     cmd_vel_pub.publish(msg);
 }
 
 void one_spin(){
     geometry_msgs::Twist msg;
     msg.linear.x = 30;
-    msg.angular.z = -30;
+    msg.angular.z = -20;
     cmd_vel_pub.publish(msg);
 }
 

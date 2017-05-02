@@ -107,6 +107,19 @@ class arbiter(object):
 
     def update_status(self, value):
         self.miss_stat = value.data
+        if self.miss_stat == 5:  #miss_stat 5 means restart
+            self.flag = 0
+            self.can_vel_x = 0
+            self.can_vel_z = 0
+            self.rwk_vel_x = 0
+            self.rwk_vel_z = 0
+            self.obst_vel_x = 0
+            self.obst_vel_z = 0
+            self.gohome_vel_x = 0
+            self.gohome_vel_z = 0
+            self.miss_stat = 1
+            self.msg = Twist()
+            self.can_picked = False;
 
     #run everything
     def run(self):

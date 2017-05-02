@@ -11,7 +11,7 @@ from std_msgs.msg import Bool
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Int8
 
-
+miss_stat_read = 0;
 
 doMask = False # set to True if you want to do the red mask, otherwise False
 if doMask:
@@ -96,6 +96,10 @@ def talker_miss_stat(miss_stat):
         pub2.publish(msg)
         break
 
+def check_status(miss_stat_val):
+    miss_stat_read = miss_stat_val.data;
+
+
 cap = cv2.VideoCapture(0) #1 for webcam
 cap.set(3,400)
 cap.set(4,300)
@@ -105,6 +109,7 @@ msg = Int8()
 
 while(True):
 
+    rospy.Subscriber('/miss_stat', Int8, check_status)
     ret, img = cap.read()
 
     if doMask:
@@ -166,4 +171,8 @@ while(True):
     #cv2.imshow("frame", img_o)
     k = cv2.waitKey(1) & 0xFF
     if k == ord('q'):
-	       break
+        break
+    if rospy.is_shutdown():
+        break
+    if miss_stat_read == 5: #mission status 5 means restart, so exit so we can restart
+        break

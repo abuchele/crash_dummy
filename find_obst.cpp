@@ -75,7 +75,7 @@ void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
         }
     }
 
-    if (forward_distance < .2)
+    if (forward_distance < .3)
     {
         // Move backward
         flag.data=1; //avoiding obstacles
@@ -101,7 +101,7 @@ void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
         // Move forward
         flag.data=0; //not avoiding obstacles
         twist.angular.z = 0; //go straight forward
-        twist.linear.x = 30; //drive forward
+        twist.linear.x = 20; //drive forward
         //ROS_INFO_STREAM(cmd_array);
     }
     obstacle_flag.publish(flag);
