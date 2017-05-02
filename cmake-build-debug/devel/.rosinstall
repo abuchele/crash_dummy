@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/anna/catkin_ws/src/crash_dummy/cmake-build-debug/devel/setup.sh
