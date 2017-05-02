@@ -24,14 +24,14 @@ void one_random(){
     geometry_msgs::Twist msg;
     srand (time(NULL));
     z1 = rand() % 101;
-    msg.linear.x = 20;
+    msg.linear.x = 30;
     msg.angular.z = z1 -50;
     cmd_vel_pub.publish(msg);
 }
 
 void one_spin(){
     geometry_msgs::Twist msg;
-    msg.linear.x = 20;
+    msg.linear.x = 30;
     msg.angular.z = -30;
     cmd_vel_pub.publish(msg);
 }
