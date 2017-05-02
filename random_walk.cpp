@@ -7,64 +7,65 @@
 #include "std_msgs/String.h"
 
 
-ros::Publisher cmd_vel_pub;
-
-ros::Time rstart;
-ros::Time sstart;
-
-ros::Duration cycle_time (10.0);
-ros::Duration spin_time (10.0);
-ros::Duration one_time (1.0);
-int random_counter = 0;
-bool spin = false;
-int spin_counter = 0;
-
-void one_random(){
-    int z1;
-    geometry_msgs::Twist msg;
-    srand (time(NULL));
-    z1 = rand() % 101;
-    msg.linear.x = 20;
-    msg.angular.z = z1 -50;
-    cmd_vel_pub.publish(msg);
-}
-
-void one_spin(){
-    geometry_msgs::Twist msg;
-    msg.linear.x = 20;
-    msg.angular.z = -30;
-    cmd_vel_pub.publish(msg);
-}
-
-
-void timerCallback(const ros::TimerEvent& event){
-    if (spin) {
-        one_spin();
-        spin_counter += 1;
-        if (spin_counter > 9){
-            spin_counter = 0;
-            spin = false;
-        }
-    }
-    else{
-        one_random();
-        random_counter += 1;
-        if (random_counter > 9){
-            random_counter = 0;
-            spin = true;
-        }
-    }
-}
-
-
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "walk");
-    ros::NodeHandle n;
-    cmd_vel_pub = n.advertise<geometry_msgs::Twist>("rwk/cmd_vel", 1000);
-    ros::Timer timer = n.createTimer(ros::Duration(1.0), (const ros::TimerCallback &) timerCallback);
-    ros::spin();
-    return 0;
+
+ros::init(argc, argv, "walk");
+
+ros::NodeHandle n;
+
+ros::Publisher chatter_pub = n.advertise<geometry_msgs::Twist>("rwk/cmd_vel", 1000);
+
+ros::Rate loop_rate(10);
+
+ros::Time begin = ros::Time::now();
+ros::Duration run_time;
+
+int timeS = 20;
+
+int counterRand = 0;
+int counterSpin = 0;
+
+while (true){
+
+while (counterRand < (timeS*2))
+{
+	int z_rand, z1;
+
+
+	geometry_msgs::Twist msg;
+
+	srand (time(NULL));
+	z1 = rand() % 101;
+
+
+
+	msg.linear.x = 20;
+	msg.angular.z = z1 -50;
+
+	chatter_pub.publish(msg);
+
+	loop_rate.sleep();
+
+	ros::Duration run_time = ros::Time::now() - begin;
+	counterRand = counterRand + 1;
+}
+
+while (counterSpin < timeS){
+	geometry_msgs::Twist msg;
+	msg.linear.x = 20;
+	msg.angular.z = -30;
+	chatter_pub.publish(msg);
+	loop_rate.sleep();
+	counterSpin = counterSpin +5;
+}
+counterRand = 0;
+counterSpin = 0;
+
+
+ros::spinOnce(); 
+}
+return 0;
 }
 
 

@@ -1,8 +1,0 @@
-prefix=/home/anna/catkin_ws/src/crash_dummy/cmake-build-debug/devel
-
-Name: crash_dummy
-Description: Description of crash_dummy
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/anna/catkin_ws/src/crash_dummy/cmake-build-debug/devel/lib 
-Requires: 
