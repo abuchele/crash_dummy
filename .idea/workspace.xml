@@ -30,6 +30,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d3c6953d-815b-491b-8fb2-4c15c0e0a426" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/can_size.py" afterPath="$PROJECT_DIR$/can_size.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/random_walk.cpp" afterPath="$PROJECT_DIR$/random_walk.cpp" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -58,8 +59,8 @@
       <file leaf-file-name="random_walk.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/random_walk.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="556">
-              <caret line="66" column="0" lean-forward="false" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
+            <state relative-caret-position="-429">
+              <caret line="33" column="17" lean-forward="false" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -67,11 +68,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="find_obst.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="can_size.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/can_size.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="320">
+              <caret line="156" column="35" lean-forward="false" selection-start-line="156" selection-start-column="35" selection-end-line="156" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="find_obst.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/find_obst.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="68" column="5" lean-forward="true" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="5" />
+            <state relative-caret-position="0">
+              <caret line="55" column="5" lean-forward="true" selection-start-line="55" selection-start-column="5" selection-end-line="55" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -86,8 +97,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/random_walk.cpp" />
         <option value="$PROJECT_DIR$/find_obst.cpp" />
+        <option value="$PROJECT_DIR$/random_walk.cpp" />
+        <option value="$PROJECT_DIR$/can_size.py" />
       </list>
     </option>
   </component>
@@ -475,12 +487,12 @@
       <option name="presentableId" value="Default" />
       <updated>1487453254168</updated>
       <workItem from="1487453258271" duration="1287000" />
-      <workItem from="1493848644338" duration="872000" />
+      <workItem from="1493848644338" duration="1239000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2764000" />
+    <option name="totallyTimeSpent" value="3131000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="68" y="-11" width="1853" height="1092" extended-state="6" />
@@ -560,16 +572,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/random_walk.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="556">
-          <caret line="66" column="0" lean-forward="false" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3800">
@@ -580,8 +582,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/find_obst.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="68" column="5" lean-forward="true" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="5" />
+        <state relative-caret-position="0">
+          <caret line="55" column="5" lean-forward="true" selection-start-line="55" selection-start-column="5" selection-end-line="55" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/random_walk.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-429">
+          <caret line="33" column="17" lean-forward="false" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/can_size.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="156" column="35" lean-forward="false" selection-start-line="156" selection-start-column="35" selection-end-line="156" selection-end-column="35" />
           <folding />
         </state>
       </provider>

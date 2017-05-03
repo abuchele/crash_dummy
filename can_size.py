@@ -150,7 +150,7 @@ while(True):
         try:
             [biggest_rect, angle] = box(rects, img_o)
             twist.angular.z = angle  #(angle/180.0)*100
-            twist.linear.x = 20
+            twist.linear.x = 15
             action = distance(biggest_rect, img_o)
 
             if (action):
