@@ -13,7 +13,7 @@ from std_msgs.msg import Int8
 
 miss_stat_read = 0;
 
-doMask = False # set to True if you want to do the red mask, otherwise False
+doMask = True # set to True if you want to do the red mask, otherwise False
 if doMask:
     cascade = cv2.CascadeClassifier("cascade0.xml") #use the classifier that works with the mask
 else:
