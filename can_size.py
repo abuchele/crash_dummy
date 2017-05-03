@@ -100,7 +100,7 @@ def check_status(miss_stat_val):
     miss_stat_read = miss_stat_val.data;
 
 
-cap = cv2.VideoCapture(1) #1 for webcam
+cap = cv2.VideoCapture(0) #1 for webcam
 cap.set(3,400)
 cap.set(4,300)
 twist = Twist()
@@ -168,7 +168,7 @@ while(True):
         except rospy.ROSInterruptException:
             pass
 
-    cv2.imshow("frame", img_o)
+    #cv2.imshow("frame", img_o)
     k = cv2.waitKey(1) & 0xFF
     if k == ord('q'):
         break

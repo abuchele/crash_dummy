@@ -47,30 +47,23 @@ void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
     twist.linear.x = VELOCITY;
     twist.angular.z = 0; // straight
 
-    scan = lidar_scan;
     int number_of_ranges = (int) lidar_scan.ranges.size();
+    scan = lidar_scan;
 
-    filtered_scan.ranges = lidar_scan.ranges;
-    filtered_scan.header.frame_id = lidar_scan.header.frame_id;
-    filtered_scan.angle_min = lidar_scan.angle_min;
-    filtered_scan.angle_max = lidar_scan.angle_max;
-    filtered_scan.angle_increment = lidar_scan.angle_increment;
-    filtered_scan.range_max = lidar_scan.range_max;
-    filtered_scan.range_min = lidar_scan.range_min;
 
     // Remove junk values from scan data (0.0 is out of range or too close to be accurate)
-    for(int i=0; i < sizeof(scan.ranges) / sizeof(scan.ranges[0]); i++)
+    for(int i=0; i < sizeof(lidar_scan.ranges) / sizeof(lidar_scan.ranges[0]); i++)
     {
-        if(filtered_scan.ranges[i] < 0.1 || filtered_scan.ranges[i] > 3.5)
+        if(lidar_scan.ranges[i] < 0.1 || lidar_scan.ranges[i] > 3.5)
         {
-            filtered_scan.ranges[i] = 0.0;
+            scan.ranges[i] = 0.0;
         }
     }
     // Calculate output array using some portion of scan -> set "forward distance" to the smallest value -> the closest object.
     for (int i = number_of_ranges/3; i<2*number_of_ranges/3;i++)
     {
-        if ((forward_distance > filtered_scan.ranges[i]) && (filtered_scan.ranges[i] >= 0.1)) {
-            forward_distance = filtered_scan.ranges[i];
+        if ((forward_distance > scan.ranges[i]) && (scan.ranges[i] >= 0.1)) {
+            forward_distance = scan.ranges[i];
             smallest = i;
         }
     }
