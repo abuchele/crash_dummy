@@ -70,6 +70,7 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "walk");
     ros::NodeHandle n;
+    ros::Rate loop_rate(5);
     cmd_vel_pub = n.advertise<geometry_msgs::Twist>("rwk/cmd_vel", 1000);
     ros::Timer timer = n.createTimer(ros::Duration(1.0), (const ros::TimerCallback &) timerCallback);
     ros::spin();

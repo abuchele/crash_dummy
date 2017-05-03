@@ -9,6 +9,7 @@ from std_msgs.msg import Int8MultiArray, Int8, Bool
 from geometry_msgs.msg import Twist
 import numpy as np
 
+temporary_workaround = True #if the robot should ignore obstacle detection after finding the can
 
 class arbiter(object):
     def __init__(self):
@@ -129,7 +130,7 @@ class arbiter(object):
 
 if __name__ == '__main__':
     main = arbiter()
-    r = rospy.Rate(50)
+    r = rospy.Rate(5)
     while not rospy.is_shutdown():
         main.run()
         r.sleep()

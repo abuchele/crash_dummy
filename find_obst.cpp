@@ -118,6 +118,7 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "midbrain");
 
     ros::NodeHandle n;
+    ros::Rate loop_rate(5);
 
     // create topics to publish to
     obstacle_flag = n.advertise<std_msgs::Bool>("obst/flag",1000);
