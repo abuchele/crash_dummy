@@ -80,7 +80,6 @@ class arbiter(object):
             self.msg.angular.z = 0
             self.miss_stat = 1
         elif self.miss_stat == 4: #drive home! This functionality does not exist yet, but we are hopeful.
-<<<<<<< HEAD
             #self.msg.linear.x = 0  
             #self.msg.angular.z = 0 
 
@@ -91,10 +90,6 @@ class arbiter(object):
             else:
                 self.msg.linear.x = self.gohome_vel_x
                 self.msg.angular.z = self.gohome_vel_z 
-=======
-            self.msg.linear.x = self.gohome_vel_x
-            self.msg.angular.z = self.gohome_vel_z
->>>>>>> 096c4f53e4053316b48b3f4f59e5ef670afe3e27
         else:
             pass
             #we shouldn't be here!
