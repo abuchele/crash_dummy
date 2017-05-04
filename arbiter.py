@@ -64,8 +64,12 @@ class arbiter(object):
                 self.msg.linear.x = self.rwk_vel_x
                 self.msg.angular.z = self.rwk_vel_z
         elif self.miss_stat == 2: #drive to can
-            self.msg.linear.x = self.can_vel_x
-            self.msg.angular.z = self.can_vel_z
+            if self.flag:
+                self.msg.linear.x = self.obst_vel_x
+                self.msg.angular.z = self.obst_vel_z
+            else:
+                self.msg.linear.x = self.can_vel_x
+                self.msg.angular.z = self.can_vel_z
         elif self.miss_stat == 3: #pick up can
             self.msg.linear.x = 0
             self.msg.angular.z = 0
