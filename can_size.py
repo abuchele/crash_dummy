@@ -16,8 +16,10 @@ miss_stat_read = 0;
 doMask = True # set to True if you want to do the red mask, otherwise False
 
 
+
 def detect(img):
     #rects = cascade.detectMultiScale(img, 1.3, 4, cv2.CASCADE_SCALE_IMAGE, (20,20))
+
 
     _, conts, hierarchy = cv2.findContours(img.copy(), cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 
@@ -108,6 +110,7 @@ def check_status(miss_stat_val):
 
 
 cap = cv2.VideoCapture(0) #1 for webcam
+
 cap.set(3,400)
 cap.set(4,300)
 twist = Twist()
@@ -163,6 +166,7 @@ while(True):
     else:
         try:
             [biggest_rect, angle] = box(rects, img_o)
+
             angle_new = angle - 3
             cv2.rectangle(screen, (biggest_rect[0], biggest_rect[1]),(biggest_rect[2], biggest_rect[3]), (0,0,0))
             twist.angular.z = angle_new   #(angle/180.0)*100
@@ -170,6 +174,7 @@ while(True):
             action = distance(biggest_rect, img_o)
             if (action):
                 if ((abs(angle_new) < 7)):
+
                     miss_stat = 3
                 else:
                     miss_stat = 2
@@ -190,7 +195,7 @@ while(True):
         except rospy.ROSInterruptException:
             pass
 
-    #cv2.imshow("frame", img_o)
+    cv2.imshow("frame", img_o)
     k = cv2.waitKey(1) & 0xFF
     if k == ord('q'):
         break

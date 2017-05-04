@@ -47,6 +47,7 @@ void one_spin(){
     geometry_msgs::Twist msg;
     msg.linear.x = 22;
     msg.angular.z = -30;
+
     cmd_vel_pub.publish(msg);
 }
 
