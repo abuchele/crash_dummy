@@ -19,6 +19,7 @@ class returner:
         self.position = [0,0] #x, y from starting point in cm
         self.twist = 0
         self.is_clear = True
+        self.obstacle_pos = False
 
         self.WHEEL_DIAMETER = 10 #cm
         self.ROBOT_WIDTH = 25 #cm, distance between wheels
@@ -58,10 +59,10 @@ class returner:
 
         if self.is_clear == False: #To be implemented
             #wall_follow #Basically turn around to one angle some and move forward.
-            if obstacle_pos = right or center:
+            if self.obstacle_pos = right or center:
                 self.twist.linear.x = 10
                 self.twist.angular.z = -50
-            elif obstacle_pos = left:
+            elif self.obstacle_pos = left:
                 self.twist.linear.x = 10
                 self.twist.angular.z = 50
 
