@@ -44,8 +44,8 @@ class returner:
 
 
     def update_position(self):
-        right_length = self.right_change * self.P2L
-        left_length = self.left_change * self.P2L
+        right_length = self.rightChange * self.P2L
+        left_length = self.leftChange * self.P2L
         angleChange = (right_length - left_length)/ (ROBOT_WIDTH)
         dcenter = (left_length - right_length) / 2.0
 
