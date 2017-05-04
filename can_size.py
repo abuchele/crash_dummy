@@ -107,9 +107,12 @@ def talker(coke_can,miss_stat_tosend):
 
 
 def check_status(miss_stat_val):
+    global miss_stat_read
     miss_stat_read = miss_stat_val.data;
 
 def run_can_size():
+    global miss_stat
+    global miss_stat_read
     while(True):
 
         rospy.Subscriber('/miss_stat', Int8, check_status)
