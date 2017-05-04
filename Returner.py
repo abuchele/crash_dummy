@@ -12,7 +12,7 @@ class returner:
         rospy.init_node("returner")
         self.pub = rospy.publisher("command", int16)
         rospy.Subscriber("goHome", tuple, self.encoder_callback)
-        rospy.Subscriber("lidar_vel", twist, self.get_back)
+        #rospy.Subscriber("lidar_vel", twist, self.get_back)
         self.leftChange = 0
         self.rightChange = 0
         self.angle = np.pi/2.0;
@@ -57,24 +57,23 @@ class returner:
         #this would help a lot.
         ideal_angle = np.arctan(self.position[1] / self.position[0]) + np.pi/2.0
 
-        if self.is_clear == False: #To be implemented
-            #wall_follow #Basically turn around to one angle some and move forward.
-            if self.obstacle_pos = right or center:
-                self.twist.linear.x = 10
-                self.twist.angular.z = -50
-            elif self.obstacle_pos = left:
-                self.twist.linear.x = 10
-                self.twist.angular.z = 50
+        # if self.is_clear == False: #To be implemented
+        #     #wall_follow #Basically turn around to one angle some and move forward.
+        #     if self.obstacle_pos = right or center:
+        #         self.twist.linear.x = 10
+        #         self.twist.angular.z = -50
+        #     elif self.obstacle_pos = left:
+        #         self.twist.linear.x = 10
+        #         self.twist.angular.z = 50
 
-        elif self.is_clear:
-            elif (self.angle - ideal_angle) < (-10.0/360.0)/(2*np.pi)
-                self.twist.linear.x = 10
-                self.twist.angular.z = 50 #right turn.
-            elif (self.angle - ideal_angle) > (10.0/360.0)/(2*np.pi)
-                self.twist.linear.x = 10
-                self.twist.angular.z = -50 #Left turn
-            else:
-                self.twist.linear.x = 20 #forward
-                self.twist.angular.z = 0
+        if (self.angle - ideal_angle) < (-10.0/360.0)/(2*np.pi)
+            self.twist.linear.x = 10
+            self.twist.angular.z = 50 #right turn.
+        elif (self.angle - ideal_angle) > (10.0/360.0)/(2*np.pi)
+            self.twist.linear.x = 10
+            self.twist.angular.z = -50 #Left turn
+        else:
+            self.twist.linear.x = 20 #forward
+            self.twist.angular.z = 0
 
         pub.publish(twist)
