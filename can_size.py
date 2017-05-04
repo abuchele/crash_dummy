@@ -12,7 +12,8 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Int8
 
 miss_stat_read = 0;
-global miss_stat;
+int miss_stat;
+int miss_stat_tosend
 cap = cv2.VideoCapture(0) #1 for webcam
 cap.set(3,400)
 cap.set(4,300)
@@ -90,6 +91,7 @@ def distance(rect, img):
 
 
 def talker(coke_can,miss_stat_tosend):
+    global miss_stat_tosend
     pub = rospy.Publisher('img_rec/cmd_vel', Twist, queue_size=10)
     pub2 = rospy.Publisher('img_rec/miss_stat', Int8, queue_size=10)
     rospy.init_node('img_rec', anonymous=True)
@@ -103,6 +105,7 @@ def talker(coke_can,miss_stat_tosend):
         break
 
 def talker_miss_stat(miss_stat_tosend):
+    global miss_stat_tosend
     pub2 = rospy.Publisher('/miss_stat', Int8, queue_size=10)
     #rospy.init_node('img_rec_distance', anonymous=True)
     rate = rospy.Rate(5) # 5hz
@@ -116,6 +119,7 @@ def check_status(miss_stat_val):
     miss_stat_read = miss_stat_val.data;
 
 def run_can_size():
+    global miss_stat
 
     while(True):
 
