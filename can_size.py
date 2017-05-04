@@ -14,32 +14,42 @@ from std_msgs.msg import Int8
 miss_stat_read = 0;
 
 doMask = True # set to True if you want to do the red mask, otherwise False
-if doMask:
-    cascade = cv2.CascadeClassifier("cascade0.xml") #use the classifier that works with the mask
-else:
-    cascade = cv2.CascadeClassifier("cascade.xml")
+
 
 
 def detect(img):
-    rects = cascade.detectMultiScale(img, 1.3, 4, cv2.CASCADE_SCALE_IMAGE, (20,20))
+    #rects = cascade.detectMultiScale(img, 1.3, 4, cv2.CASCADE_SCALE_IMAGE, (20,20))
+
+
+    _, conts, hierarchy = cv2.findContours(img.copy(), cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+
+    #adapter code so that it still gives you a rectangle.
+    rects = []
+    for i in range(len(conts)):
+        cont=conts[i]
+        x, y, w, h = cv2.boundingRect(cont)
+        rect = [x,y,x+w,y+h]
+        rects.append(rect)
 
     if len(rects) == 0:
         return [], img
-    rects[:, 2:] += rects[:, :2]
-    return rects, img
+
+    else:
+        #rects[:, 2:] += rects[:, :2]
+        return rects, img
 
 def box(rects, img):
     max_area = 0
     xbig = 0
     xf1 = 0
     xf2 = 0
-    yf1 = 0 
-    yf2 = 0 
+    yf1 = 0
+    yf2 = 0
     biggest_rect = []
     for x1, y1, x2, y2 in rects:
         if (x2-x1) > xbig :
             xbig = x2 - x1
-            xf1=x1 
+            xf1=x1
             xf2=x2
             yf1=y1
             yf2=y2
@@ -50,7 +60,7 @@ def box(rects, img):
             biggest_rect = [x1, y1, x2, y2]
 
     cv2.rectangle(img, (x1, y1), (x2, y2), (127, 255, 0), 2)
-    angle = (((xf1 + (xf2-xf1)/2)/320.0) * 63 - 33.5) 
+    angle = (((xf1 + (xf2-xf1)/2)/320.0) * 63 - 33.5)
     cv2.line(img,((xf1+xf2)/2,0),((xf1+xf2)/2,320),(255,255,255),2)
     return [biggest_rect, angle]
 
@@ -68,8 +78,7 @@ def distance(rect, img):
     y2 = rect[3]
     height = abs(y1-y2)
     distance = (height_cm*focal_length)/height
-    print distance
-    if 15.0 < distance < 38.0 :
+    if 27.0 < distance < 47.0 :
         return True
     return False
 
@@ -100,7 +109,8 @@ def check_status(miss_stat_val):
     miss_stat_read = miss_stat_val.data;
 
 
-cap = cv2.VideoCapture(1) #1 for webcam
+cap = cv2.VideoCapture(0) #1 for webcam
+
 cap.set(3,400)
 cap.set(4,300)
 twist = Twist()
@@ -111,9 +121,11 @@ while(True):
 
     rospy.Subscriber('/miss_stat', Int8, check_status)
     ret, img = cap.read()
+    screen = img.copy()
 
     if doMask:
         img_hsv=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
 
         # lower mask (0-10)
         lower_red = np.array([0,160,50])
@@ -128,12 +140,17 @@ while(True):
         # join masks
         mask = mask0+mask1
 
+        #mask = cv2.erode(mask, None, iterations=2)
+        #mask = cv2.dilate(mask, None, iterations=2)
+
         # set output img to zero everywhere except mask
-        output_img = img.copy()
-        output_img[np.where(mask==0)] = 0
+        #output_img = img.copy()
+        #output_img[np.where(mask==0)] = 0
+        mask = cv2.medianBlur(mask, 5)
+        output_img = mask
 
     else:
-        output_img = img.copy()
+        output_img = cv2.cvtColor(img.copy(), cv2.COLOR_BGR2GRAY)
 
     rects, img_o = detect(output_img)
 
@@ -149,10 +166,15 @@ while(True):
     else:
         try:
             [biggest_rect, angle] = box(rects, img_o)
-            twist.angular.z = angle   #(angle/180.0)*100
+
+            angle_new = angle - 3
+            cv2.rectangle(screen, (biggest_rect[0], biggest_rect[1]),(biggest_rect[2], biggest_rect[3]), (0,0,0))
+            twist.angular.z = angle_new   #(angle/180.0)*100
+
             action = distance(biggest_rect, img_o)
             if (action):
-                if ((abs(angle) < 2)):
+                if ((abs(angle_new) < 7)):
+
                     miss_stat = 3
                 else:
                     miss_stat = 2
@@ -164,7 +186,7 @@ while(True):
                 aabs = abs(angle)
                 if aabs < 10:
                     twist.linear.x = 12;
-                elif aabs < 20: 
+                elif aabs < 20:
                     twist.linear.x = 18;
                 else:
                     twist.linear.x = 22;

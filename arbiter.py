@@ -33,27 +33,27 @@ class arbiter(object):
         #create all the subscribers for the topics for cmd_vel
         rospy.Subscriber('/gohome/cmd_vel', Twist, self.gohome_vel_cb) #topic which tells us how to go home
         rospy.Subscriber('/img_rec/cmd_vel', Twist, self.can_vel_cb)   #where to go to find the can
-        rospy.Subscriber('/rwk/cmd_vel', Twist, self.rwk_vel_cb)       #how to random walk 
+        rospy.Subscriber('/rwk/cmd_vel', Twist, self.rwk_vel_cb)       #how to random walk
         rospy.Subscriber('/obst/cmd_vel', Twist, self.obst_vel_cb)     #how to turn to avoid obstacles
 
         #create subscribers for the flags
         rospy.Subscriber('e_stop', Bool, self.e_stop_cb)           #whether e-stop is pressed
         rospy.Subscriber('/obst/flag', Bool, self.update_flag)         #whether we are avoiding an obstacle
         rospy.Subscriber('/can_picked', Bool, self.update_status)      #whether the can has been picked up yet
-	
+
         #create subscribers for the mission status
         rospy.Subscriber('img_rec/miss_stat', Int8, self.update_status) #mission status published by img_rec
         rospy.Subscriber('/miss_stat', Int8, self.update_status)        #mission status published by arbiter
 
         #create publishers for cmd_vel (speed arduino will tell motors to go) and mission status (where we are in the mission)
-        self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)     #publish cmd_vel 
+        self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)     #publish cmd_vel
         self.miss_stat_pub = rospy.Publisher('/miss_stat', Int8, queue_size=1)  #publish mission status
 
     def update_flag(self, value):
         self.flag = value.data  #update self value for the flag (whether we are avoiding obstacle)
 
     def status_pub(self):
-        if self.miss_stat == 0: #if we are stopped 
+        if self.miss_stat == 0: #if we are stopped
             self.msg.linear.x = 0
             self.msg.angular.z = 0 #mission status = 0: STOP
         elif self.miss_stat == 1: #random walk
@@ -64,8 +64,12 @@ class arbiter(object):
                 self.msg.linear.x = self.rwk_vel_x
                 self.msg.angular.z = self.rwk_vel_z
         elif self.miss_stat == 2: #drive to can
-            self.msg.linear.x = self.can_vel_x
-            self.msg.angular.z = self.can_vel_z
+            if self.flag:
+                self.msg.linear.x = self.obst_vel_x
+                self.msg.angular.z = self.obst_vel_z
+            else:
+                self.msg.linear.x = self.can_vel_x
+                self.msg.angular.z = self.can_vel_z
         elif self.miss_stat == 3: #pick up can
             self.msg.linear.x = 0
             self.msg.angular.z = 0
@@ -76,12 +80,16 @@ class arbiter(object):
             self.msg.angular.z = 0
             self.miss_stat = 1
         elif self.miss_stat == 4: #drive home! This functionality does not exist yet, but we are hopeful.
-            self.msg.linear.x = 0  
-            self.msg.angular.z = 0 
+            #self.msg.linear.x = 0  
+            #self.msg.angular.z = 0 
 
             #if this functionality exists, uncomment the next two lines, and comment out the previous two.
-            #self.msg.linear.x = self.gohome_vel_x
-            #self.msg.angular.z = self.gohome_vel_z 
+            if self.flag:
+                self.msg.linear.x = self.obst_vel_x
+                self.msg.angular.z = self.obst_vel_z
+            else:
+                self.msg.linear.x = self.gohome_vel_x
+                self.msg.angular.z = self.gohome_vel_z 
         else:
             pass
             #we shouldn't be here!
