@@ -28,10 +28,10 @@ void one_random(){
     z1 = rand() % 101;
     zval = z1 - 50;
     if (abs(zval) > 20){
-        xval = 25;
+        xval = 23;
     }
     else {
-        xval = 15;
+        xval = 13;
     }
     msg.angular.z = zval;
     msg.linear.x = xval;
