@@ -82,11 +82,11 @@ void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
         angle_val = (smallest)/ (number_of_ranges);
         if (angle_val < 0.5) {
             //turn left
-            twist.angular.z = -50;
+            twist.angular.z = -40;
         }
         else if (angle_val >= 0.5){
             //turn right
-            twist.angular.z = 50;
+            twist.angular.z = 40;
         }
 
     }

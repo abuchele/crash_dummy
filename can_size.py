@@ -154,7 +154,7 @@ while(True):
             action = distance(biggest_rect, img_o)
 
             if (action):
-                if ((abs(angle) < 0.4)):
+                if ((abs(angle) < 0.8)):
                     miss_stat = 3
                 else:
                     miss_stat = 2
