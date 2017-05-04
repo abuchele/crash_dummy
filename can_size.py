@@ -89,16 +89,16 @@ def distance(rect, img):
     return False
 
 
-def talker(coke_can,miss_stat):
+def talker(coke_can,miss_stat_tosend):
     pub = rospy.Publisher('img_rec/cmd_vel', Twist, queue_size=10)
-    pub2 = rospy.Publisher('img_rec/', Int8, queue_size=10)
+    pub2 = rospy.Publisher('img_rec/miss_stat', Int8, queue_size=10)
     rospy.init_node('img_rec', anonymous=True)
 
     rate = rospy.Rate(5) # 5hz
     while not rospy.is_shutdown():
         rospy.loginfo(coke_can)
         pub.publish(coke_can)
-        msg.data = miss_stat;
+        msg.data = miss_stat_tosend;
         pub2.publish(msg)
         break
 
