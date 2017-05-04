@@ -17,7 +17,6 @@ cap = cv2.VideoCapture(0) #1 for webcam
 cap.set(3,400)
 cap.set(4,300)
 twist = Twist()
-miss_stat = 1
 msg = Int8()
 
 doMask = True # set to True if you want to do the red mask, otherwise False
