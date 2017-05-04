@@ -11,8 +11,8 @@ class returner:
     def __init__(self):
 
         rospy.init_node("returner")
-        self.pub = rospy.Publisher("gohome/cmd_vel", Twist)
-        rospy.Subscriber("encoder", Int16MultiArray, self.encoder_callback)
+        self.pub = rospy.Publisher("gohome/cmd_vel", Twist, queue_size=10)
+        rospy.Subscriber("encoder", Int16MultiArray, self.encoder_callback, queue_size=10)
         #rospy.Subscriber("lidar_vel", twist, self.get_back)
         self.leftChange = 0
         self.rightChange = 0
@@ -56,8 +56,10 @@ class returner:
 
         #Alternatively, if have a map, then can set temporary waypoints
         #this would help a lot.
-
-        ideal_angle = np.arctan(self.position[1] / self.position[0]) + np.pi/2.0
+        if self.position[0] == 0:
+            ideal_angle = 0
+        else:
+            ideal_angle = np.arctan(self.position[1] / self.position[0]) + np.pi/2.0
 
         # if self.is_clear == False: #To be implemented
         #     #wall_follow #Basically turn around to one angle some and move forward.
@@ -78,7 +80,7 @@ class returner:
             self.twist.linear.x = 20 #forward
             self.twist.angular.z = 0
 
-        pub.publish(twist)
+        self.pub.publish(self.twist)
 
 
 if __name__ == '__main__':
