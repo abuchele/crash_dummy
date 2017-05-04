@@ -39,10 +39,10 @@ class arbiter(object):
         #create subscribers for the flags
         rospy.Subscriber('e_stop', Bool, self.e_stop_cb)           #whether e-stop is pressed
         rospy.Subscriber('/obst/flag', Bool, self.update_flag)         #whether we are avoiding an obstacle
-        rospy.Subscriber('/can_picked_pub', Bool, self.update_status)      #whether the can has been picked up yet
+        rospy.Subscriber('/can_picked', Bool, self.update_status)      #whether the can has been picked up yet
 
         #create subscribers for the mission status
-        rospy.Subscriber('img_rec/miss_stat', Int8, self.update_status_img) #mission status published by img_rec
+        rospy.Subscriber('img_rec/miss_stat', Int8, self.update_status) #mission status published by img_rec
         rospy.Subscriber('/miss_stat', Int8, self.update_status)        #mission status published by arbiter
 
         #create publishers for cmd_vel (speed arduino will tell motors to go) and mission status (where we are in the mission)
@@ -56,7 +56,6 @@ class arbiter(object):
         if self.miss_stat == 0: #if we are stopped
             self.msg.linear.x = 0
             self.msg.angular.z = 0 #mission status = 0: STOP
-            self.miss_stat = 1
         elif self.miss_stat == 1: #random walk
             if self.flag:
                 self.msg.linear.x = self.obst_vel_x
@@ -76,7 +75,6 @@ class arbiter(object):
             self.msg.angular.z = 0
             if self.can_picked == True:
                 self.miss_stat = 4
-                print "arbiter miss_stat = 4!"
         elif self.miss_stat == -1: #we're just starting up, so wait
             self.msg.linear.x = 0
             self.msg.angular.z = 0
@@ -131,12 +129,6 @@ class arbiter(object):
             self.miss_stat = 1
             self.msg = Twist()
             self.can_picked = False;
-
-    def update_status_img(self, value):
-        if self.miss_stat == 4:
-            pass
-        else:
-            self.miss_stat = value
 
     #run everything
     def run(self):

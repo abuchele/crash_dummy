@@ -44,9 +44,9 @@ class returner:
 
 
     def update_position(self):
-        right_length = self.rightChange * self.P2L
-        left_length = self.leftChange * self.P2L
-        angleChange = (right_length - left_length)/ (self.ROBOT_WIDTH)
+        right_length = self.right_change * self.P2L
+        left_length = self.left_change * self.P2L
+        angleChange = (right_length - left_length)/ (ROBOT_WIDTH)
         dcenter = (left_length - right_length) / 2.0
 
         #update position data
@@ -67,7 +67,7 @@ class returner:
         if self.position[0] == 0:
             ideal_angle = 0
         else:
-            ideal_angle = np.arctan(self.position[1] / self.position[0]) #+ np.pi/2.0
+            ideal_angle = np.arctan(self.position[1] / self.position[0]) + np.pi/2.0
 
 
         # if self.is_clear == False: #To be implemented

@@ -96,6 +96,14 @@ def talker(coke_can,miss_stat):
         pub2.publish(msg)
         break
 
+def talker_miss_stat(miss_stat):
+    pub2 = rospy.Publisher('/miss_stat', Int8, queue_size=10)
+    #rospy.init_node('img_rec_distance', anonymous=True)
+    rate = rospy.Rate(5) # 5hz
+    while not rospy.is_shutdown():
+        msg.data = miss_stat;
+        pub2.publish(msg)
+        break
 
 def check_status(miss_stat_val):
     miss_stat_read = miss_stat_val.data;
@@ -187,7 +195,7 @@ while(True):
         except rospy.ROSInterruptException:
             pass
 
-    #cv2.imshow("frame", img_o)
+    cv2.imshow("frame", img_o)
     k = cv2.waitKey(1) & 0xFF
     if k == ord('q'):
         break
