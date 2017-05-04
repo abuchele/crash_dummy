@@ -109,7 +109,9 @@ def talker(coke_can,miss_stat_tosend):
 
 def check_status(miss_stat_val):
     global miss_stat_read
+    global miss_stat
     miss_stat_read = miss_stat_val.data;
+    miss_stat = miss_stat_read
 
 def run_can_size():
     global miss_stat
