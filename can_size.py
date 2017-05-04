@@ -86,7 +86,7 @@ def distance(rect, img):
 
 def talker(coke_can,miss_stat):
     pub = rospy.Publisher('img_rec/cmd_vel', Twist, queue_size=10)
-    pub2 = rospy.Publisher('img_rec/miss_stat', Int8, queue_size=10)
+    pub2 = rospy.Publisher('img_rec/', Int8, queue_size=10)
     rospy.init_node('img_rec', anonymous=True)
 
     rate = rospy.Rate(5) # 5hz
@@ -161,6 +161,7 @@ while(True):
             twist.linear.x = 0.0
             if miss_stat_read == 4:
                 miss_stat = 4
+                print "miss stat 4"
             else:
                 miss_stat = 1
             talker(twist,miss_stat);
