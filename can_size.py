@@ -14,10 +14,6 @@ from std_msgs.msg import Int8
 miss_stat_read = 0;
 
 doMask = True # set to True if you want to do the red mask, otherwise False
-if doMask:
-    cascade = cv2.CascadeClassifier("cascade0.xml") #use the classifier that works with the mask
-else:
-    cascade = cv2.CascadeClassifier("cascade.xml")
 
 
 def detect(img):
@@ -112,7 +108,7 @@ def check_status(miss_stat_val):
     miss_stat_read = miss_stat_val.data;
 
 
-cap = cv2.VideoCapture(1) #1 for webcam
+cap = cv2.VideoCapture(0) #1 for webcam
 cap.set(3,400)
 cap.set(4,300)
 twist = Twist()
