@@ -39,7 +39,7 @@ class arbiter(object):
         #create subscribers for the flags
         rospy.Subscriber('e_stop', Bool, self.e_stop_cb)           #whether e-stop is pressed
         rospy.Subscriber('/obst/flag', Bool, self.update_flag)         #whether we are avoiding an obstacle
-        rospy.Subscriber('/can_picked', Bool, self.update_status)      #whether the can has been picked up yet
+        rospy.Subscriber('/can_picked_pub', Bool, self.update_status)      #whether the can has been picked up yet
 
         #create subscribers for the mission status
         rospy.Subscriber('img_rec/miss_stat', Int8, self.update_status) #mission status published by img_rec
