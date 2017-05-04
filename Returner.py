@@ -24,13 +24,12 @@ class returner:
         self.WHEEL_DIAMETER = 10 #cm
         self.ROBOT_WIDTH = 25 #cm, distance between wheels
         #Conversion factor for one full rotation of pot reading, to length.
-        self.P2L = (self.WHEEL_DIAMETER*np.pi) /  #circumference/fullrotationreading..
+        self.P2L = (self.WHEEL_DIAMETER*np.pi) / 100  #circumference/fullrotationreading..
         self.twist = Twist()
 
 
 
     def encoder_callback(self, data):
-        try:
             raw = data.data
             self.leftChange = raw[0]
             self.rightChange = raw[1]
@@ -66,10 +65,10 @@ class returner:
         #         self.twist.linear.x = 10
         #         self.twist.angular.z = 50
 
-        if (self.angle - ideal_angle) < (-10.0/360.0)/(2*np.pi)
+        if (self.angle - ideal_angle) < ((-10.0/360.0)/(2*np.pi)):
             self.twist.linear.x = 10
             self.twist.angular.z = 50 #right turn.
-        elif (self.angle - ideal_angle) > (10.0/360.0)/(2*np.pi)
+        elif (self.angle - ideal_angle) > (10.0/360.0)/(2*np.pi):
             self.twist.linear.x = 10
             self.twist.angular.z = -50 #Left turn
         else:
