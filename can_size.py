@@ -13,6 +13,7 @@ from std_msgs.msg import Int8
 
 global miss_stat_read
 global miss_stat
+miss_stat = 1
 
 cap = cv2.VideoCapture(0) #1 for webcam
 cap.set(3,400)
