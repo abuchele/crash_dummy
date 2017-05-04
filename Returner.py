@@ -71,13 +71,13 @@ class returner:
         #         self.twist.angular.z = 50
 
         if (self.angle - ideal_angle) < ((-10.0/360.0)/(2*np.pi)):
-            self.twist.linear.x = 10
-            self.twist.angular.z = 50 #right turn.
+            self.twist.linear.x = 22
+            self.twist.angular.z = 30 #right turn.
         elif (self.angle - ideal_angle) > (10.0/360.0)/(2*np.pi):
-            self.twist.linear.x = 10
-            self.twist.angular.z = -50 #Left turn
+            self.twist.linear.x = 22
+            self.twist.angular.z = -30 #Left turn
         else:
-            self.twist.linear.x = 20 #forward
+            self.twist.linear.x = 10 #forward
             self.twist.angular.z = 0
 
         self.pub.publish(self.twist)
