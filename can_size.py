@@ -147,7 +147,9 @@ def run_can_size():
             try:
                 twist.angular.z = 0.0
                 twist.linear.x = 0.0
-                talker(twist,miss_stat_read);
+                if miss_stat != 4:
+                    miss_stat = 1
+                talker(twist,miss_stat);
             except rospy.ROSInterruptException:
                 pass
             pass
