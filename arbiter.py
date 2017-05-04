@@ -42,7 +42,7 @@ class arbiter(object):
         rospy.Subscriber('/can_picked_pub', Bool, self.update_status)      #whether the can has been picked up yet
 
         #create subscribers for the mission status
-        rospy.Subscriber('img_rec/miss_stat', Int8, self.update_status) #mission status published by img_rec
+        rospy.Subscriber('img_rec/miss_stat', Int8, self.update_status_img) #mission status published by img_rec
         rospy.Subscriber('/miss_stat', Int8, self.update_status)        #mission status published by arbiter
 
         #create publishers for cmd_vel (speed arduino will tell motors to go) and mission status (where we are in the mission)
@@ -131,6 +131,12 @@ class arbiter(object):
             self.miss_stat = 1
             self.msg = Twist()
             self.can_picked = False;
+
+    def update_status_img(self, value):
+        if self.miss_stat == 4:
+            pass
+        else:
+            self.miss_stat = value
 
     #run everything
     def run(self):
