@@ -67,7 +67,7 @@ class returner:
         if self.position[0] == 0:
             ideal_angle = 0
         else:
-            ideal_angle = np.arctan(self.position[1] / self.position[0]) + np.pi/2.0
+            ideal_angle = np.arctan(self.position[1] / self.position[0]) #+ np.pi/2.0
 
 
         # if self.is_clear == False: #To be implemented
