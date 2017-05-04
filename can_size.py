@@ -102,12 +102,12 @@ def talker(coke_can,miss_stat):
         pub2.publish(msg)
         break
 
-def talker_miss_stat(miss_stat):
+def talker_miss_stat(miss_stat_tosend):
     pub2 = rospy.Publisher('/miss_stat', Int8, queue_size=10)
     #rospy.init_node('img_rec_distance', anonymous=True)
     rate = rospy.Rate(5) # 5hz
     while not rospy.is_shutdown():
-        msg.data = miss_stat;
+        msg.data = miss_stat_tosend;
         pub2.publish(msg)
         break
 
