@@ -161,42 +161,39 @@ def run_can_size():
                 pass
             pass
         else:
-            if miss_stat_read == 4:
-                twist.linear.x = 0
-                twist.angular.z = 0
-                miss_stat = 4
-                talker(twist,miss_stat);
-            else:
-                try:
-                    [biggest_rect, angle] = box(rects, img_o)
+            try:
+                [biggest_rect, angle] = box(rects, img_o)
 
-                    angle_new = angle - 3
-                    cv2.rectangle(screen, (biggest_rect[0], biggest_rect[1]),(biggest_rect[2], biggest_rect[3]), (0,0,0))
-                    twist.angular.z = angle_new   #(angle/180.0)*100
+                angle_new = angle - 3
+                cv2.rectangle(screen, (biggest_rect[0], biggest_rect[1]),(biggest_rect[2], biggest_rect[3]), (0,0,0))
+                twist.angular.z = angle_new   #(angle/180.0)*100
 
-                    action = distance(biggest_rect, img_o)
-                    if (action):
-                        if ((abs(angle_new) < 5)):
-
-                            miss_stat = 3
-                        else:
-                            miss_stat = 2
-                            twist.linear.x = -20
-                            twist.angular.z = 0
-                        talker(twist,miss_stat);
-
+                action = distance(biggest_rect, img_o)
+                if (action):
+                    if ((abs(angle_new) < 5)):
+                        miss_stat = 3
                     else:
-                        aabs = abs(angle)
-                        if aabs < 10:
-                            twist.linear.x = 12;
-                        elif aabs < 20:
-                            twist.linear.x = 18;
-                        else:
-                            twist.linear.x = 22;
                         miss_stat = 2
-                        talker(twist,miss_stat);
-                except rospy.ROSInterruptException:
-                    pass
+                        twist.linear.x = -20
+                        twist.angular.z = 0
+                    if miss_stat_read == 4:
+                        miss_stat = 4
+                    talker(twist,miss_stat);
+
+                else:
+                    aabs = abs(angle)
+                    if aabs < 10:
+                        twist.linear.x = 12;
+                    elif aabs < 20:
+                        twist.linear.x = 18;
+                    else:
+                        twist.linear.x = 22;
+                    miss_stat = 2
+                    if miss_stat_read == 4:
+                        miss_stat = 4
+                    talker(twist,miss_stat);
+            except rospy.ROSInterruptException:
+                pass
 
         #cv2.imshow("frame", img_o)
         k = cv2.waitKey(1) & 0xFF
