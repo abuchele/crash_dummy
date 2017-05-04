@@ -12,7 +12,7 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Int8
 
 miss_stat_read = 0;
-miss_stat = 1;
+global miss_stat;
 cap = cv2.VideoCapture(0) #1 for webcam
 cap.set(3,400)
 cap.set(4,300)
