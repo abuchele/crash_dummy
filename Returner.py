@@ -4,7 +4,7 @@ import numpy as np
 from std_msgs.msg import Bool
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Int16
-from std_msgs.msg import tuple(1)
+from std_msgs.msg import Int16MultiArray
 
 class returner:
 
@@ -12,7 +12,7 @@ class returner:
 
         rospy.init_node("returner")
         self.pub = rospy.Publisher("gohome/cmd_vel", Twist)
-        rospy.Subscriber("encoder", , self.encoder_callback)
+        rospy.Subscriber("encoder", Int16MultiArray, self.encoder_callback)
         #rospy.Subscriber("lidar_vel", twist, self.get_back)
         self.leftChange = 0
         self.rightChange = 0
@@ -80,10 +80,10 @@ class returner:
 
         pub.publish(twist)
 
-r = returner()
-while True:
-    r.getBack()
 
-    k = cv2.waitKey(1) & 0xFF
-    if k == ord('q'):
-	       break
+if __name__ == '__main__':
+    main = returner()
+    r = rospy.Rate(5)
+    while not rospy.is_shutdown():
+        main.get_back()
+        r.sleep()
