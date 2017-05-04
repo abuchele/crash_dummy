@@ -170,10 +170,6 @@ while(True):
             [biggest_rect, angle] = box(rects, img_o)
 
             cv2.rectangle(screen, (biggest_rect[0], biggest_rect[1]),(biggest_rect[2], biggest_rect[3]), (0,0,0))
-            cv2.imshow("hi", screen)
-            twist.angular.z = angle  #(angle/180.0)*100
-            twist.linear.x = 15
-
             twist.angular.z = angle   #(angle/180.0)*100
 
             action = distance(biggest_rect, img_o)
@@ -199,7 +195,7 @@ while(True):
         except rospy.ROSInterruptException:
             pass
 
-    cv2.imshow("frame", img_o)
+    #cv2.imshow("frame", img_o)
     k = cv2.waitKey(1) & 0xFF
     if k == ord('q'):
         break
