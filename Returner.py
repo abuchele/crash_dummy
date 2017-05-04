@@ -4,14 +4,15 @@ import numpy as np
 from std_msgs.msg import Bool
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Int16
+from std_msgs.msg import tuple(1)
 
 class returner:
 
     def __init__(self):
 
         rospy.init_node("returner")
-        self.pub = rospy.publisher("gohome/cmd_vel", Twist)
-        rospy.Subscriber("encoder", tuple, self.encoder_callback)
+        self.pub = rospy.Publisher("gohome/cmd_vel", Twist)
+        rospy.Subscriber("encoder", , self.encoder_callback)
         #rospy.Subscriber("lidar_vel", twist, self.get_back)
         self.leftChange = 0
         self.rightChange = 0
