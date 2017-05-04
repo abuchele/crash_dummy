@@ -92,6 +92,7 @@ def talker(coke_can,miss_stat):
     rate = rospy.Rate(5) # 5hz
     while not rospy.is_shutdown():
         rospy.loginfo(coke_can)
+        print "publishing miss_stat"
         pub.publish(coke_can)
         msg.data = miss_stat;
         pub2.publish(msg)
