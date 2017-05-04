@@ -56,6 +56,7 @@ class arbiter(object):
         if self.miss_stat == 0: #if we are stopped
             self.msg.linear.x = 0
             self.msg.angular.z = 0 #mission status = 0: STOP
+            self.miss_stat = 1
         elif self.miss_stat == 1: #random walk
             if self.flag:
                 self.msg.linear.x = self.obst_vel_x
