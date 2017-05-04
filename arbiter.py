@@ -75,6 +75,7 @@ class arbiter(object):
             self.msg.angular.z = 0
             if self.can_picked == True:
                 self.miss_stat = 4
+                print "arbiter miss_stat = 4!"
         elif self.miss_stat == -1: #we're just starting up, so wait
             self.msg.linear.x = 0
             self.msg.angular.z = 0
