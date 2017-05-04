@@ -76,8 +76,7 @@ def distance(rect, img):
     y2 = rect[3]
     height = abs(y1-y2)
     distance = (height_cm*focal_length)/height
-    print distance
-    if 15.0 < distance < 38.0 :
+    if 27.0 < distance < 47.0 :
         return True
     return False
 
@@ -164,13 +163,13 @@ while(True):
     else:
         try:
             [biggest_rect, angle] = box(rects, img_o)
-
+            angle_new = angle - 3
             cv2.rectangle(screen, (biggest_rect[0], biggest_rect[1]),(biggest_rect[2], biggest_rect[3]), (0,0,0))
-            twist.angular.z = angle   #(angle/180.0)*100
+            twist.angular.z = angle_new   #(angle/180.0)*100
 
             action = distance(biggest_rect, img_o)
             if (action):
-                if ((abs(angle) < 2)):
+                if ((abs(angle_new) < 7)):
                     miss_stat = 3
                 else:
                     miss_stat = 2
