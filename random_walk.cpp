@@ -46,7 +46,7 @@ void one_random(){
 void one_spin(){
     geometry_msgs::Twist msg;
     msg.linear.x = 22;
-    msg.angular.z = -20;
+    msg.angular.z = -30;
     cmd_vel_pub.publish(msg);
 }
 
@@ -60,7 +60,7 @@ void timerCallback(const ros::TimerEvent& event){
             spin = false;
         }
     }
-    else{
+    else {
         one_random();
         random_counter += 1;
         if (random_counter > 9){
