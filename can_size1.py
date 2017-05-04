@@ -96,7 +96,7 @@ def talker_miss_stat(miss_stat):
         pub2.publish(msg)
         break
 
-cap = cv2.VideoCapture(0) #1 for webcam
+cap = cv2.VideoCapture(1) #1 for webcam
 cap.set(3,400)
 cap.set(4,300)
 twist = Twist()
