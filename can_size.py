@@ -11,9 +11,9 @@ from std_msgs.msg import Bool
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Int8
 
+miss_stat_read = 0;
 
-
-doMask = False # set to True if you want to do the red mask, otherwise False
+doMask = True # set to True if you want to do the red mask, otherwise False
 if doMask:
     cascade = cv2.CascadeClassifier("cascade0.xml") #use the classifier that works with the mask
 else:
@@ -79,7 +79,7 @@ def talker(coke_can,miss_stat):
     pub2 = rospy.Publisher('img_rec/miss_stat', Int8, queue_size=10)
     rospy.init_node('img_rec', anonymous=True)
 
-    rate = rospy.Rate(10) # 10hz
+    rate = rospy.Rate(5) # 5hz
     while not rospy.is_shutdown():
         rospy.loginfo(coke_can)
         pub.publish(coke_can)
@@ -90,13 +90,17 @@ def talker(coke_can,miss_stat):
 def talker_miss_stat(miss_stat):
     pub2 = rospy.Publisher('/miss_stat', Int8, queue_size=10)
     #rospy.init_node('img_rec_distance', anonymous=True)
-    rate = rospy.Rate(10) # 10hz
+    rate = rospy.Rate(5) # 5hz
     while not rospy.is_shutdown():
         msg.data = miss_stat;
         pub2.publish(msg)
         break
 
-cap = cv2.VideoCapture(0) #1 for webcam
+def check_status(miss_stat_val):
+    miss_stat_read = miss_stat_val.data;
+
+
+cap = cv2.VideoCapture(1) #1 for webcam
 cap.set(3,400)
 cap.set(4,300)
 twist = Twist()
@@ -105,6 +109,7 @@ msg = Int8()
 
 while(True):
 
+    rospy.Subscriber('/miss_stat', Int8, check_status)
     ret, img = cap.read()
 
     if doMask:
@@ -137,33 +142,42 @@ while(True):
             twist.angular.z = 0.0
             twist.linear.x = 0.0
             miss_stat = 1
-            talker(twist,miss_stat)
+            talker(twist,miss_stat);
         except rospy.ROSInterruptException:
             pass
         pass
     else:
         try:
             [biggest_rect, angle] = box(rects, img_o)
-            twist.angular.z = angle  #(angle/180.0)*100
-            twist.linear.x = 20
+            twist.angular.z = angle   #(angle/180.0)*100
             action = distance(biggest_rect, img_o)
-
             if (action):
-                if ((abs(angle) < 0.4)):
+                if ((abs(angle) < 2)):
                     miss_stat = 3
                 else:
                     miss_stat = 2
                     twist.linear.x = -20
                     twist.angular.z = 0
-                talker(twist,miss_stat)
+                talker(twist,miss_stat);
 
             else:
+                aabs = abs(angle)
+                if aabs < 10:
+                    twist.linear.x = 12;
+                elif aabs < 20: 
+                    twist.linear.x = 18;
+                else:
+                    twist.linear.x = 22;
                 miss_stat = 2
-                talker(twist,miss_stat)
+                talker(twist,miss_stat);
         except rospy.ROSInterruptException:
             pass
 
-    #cv2.imshow("frame", img_o)
+    cv2.imshow("frame", img_o)
     k = cv2.waitKey(1) & 0xFF
     if k == ord('q'):
-	       break
+        break
+    if rospy.is_shutdown():
+        break
+    if miss_stat_read == 5: #mission status 5 means restart, so exit so we can restart
+        break
