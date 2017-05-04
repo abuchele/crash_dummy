@@ -4,6 +4,7 @@ import numpy as np
 from std_msgs.msg import Bool
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Int16
+
 from std_msgs.msg import Int16MultiArray
 
 class returner:
@@ -11,9 +12,11 @@ class returner:
     def __init__(self):
 
         rospy.init_node("returner")
+
         self.pub = rospy.Publisher("gohome/cmd_vel", Twist, queue_size=10)
         rospy.Subscriber("encoder", Int16MultiArray, self.encoder_callback, queue_size=10)
         #rospy.Subscriber("lidar_vel", twist, self.get_back)
+
         self.leftChange = 0
         self.rightChange = 0
         self.angle = np.pi/2.0;
@@ -25,16 +28,20 @@ class returner:
         self.WHEEL_DIAMETER = 10 #cm
         self.ROBOT_WIDTH = 25 #cm, distance between wheels
         #Conversion factor for one full rotation of pot reading, to length.
+
         self.P2L = (self.WHEEL_DIAMETER*np.pi) / 100  #circumference/fullrotationreading..
+
         self.twist = Twist()
 
 
 
     def encoder_callback(self, data):
+
             raw = data.data
             self.leftChange = raw[0]
             self.rightChange = raw[1]
             self.update_position()
+
 
     def update_position(self):
         right_length = self.right_change * self.P2L
@@ -56,10 +63,12 @@ class returner:
 
         #Alternatively, if have a map, then can set temporary waypoints
         #this would help a lot.
+
         if self.position[0] == 0:
             ideal_angle = 0
         else:
             ideal_angle = np.arctan(self.position[1] / self.position[0]) + np.pi/2.0
+
 
         # if self.is_clear == False: #To be implemented
         #     #wall_follow #Basically turn around to one angle some and move forward.
@@ -69,6 +78,7 @@ class returner:
         #     elif self.obstacle_pos = left:
         #         self.twist.linear.x = 10
         #         self.twist.angular.z = 50
+
 
         if (self.angle - ideal_angle) < ((-10.0/360.0)/(2*np.pi)):
             self.twist.linear.x = 22
@@ -89,3 +99,4 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         main.get_back()
         r.sleep()
+
