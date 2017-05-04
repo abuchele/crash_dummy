@@ -20,18 +20,23 @@ bool spin = false;
 int spin_counter = 0;
 int zval;
 int xval;
+int zabs;
 
 void one_random(){
     int z1;
     geometry_msgs::Twist msg;
     srand (time(NULL));
-    z1 = rand() % 101;
-    zval = z1 - 50;
-    if (abs(zval) > 20){
-        xval = 23;
+    z1 = rand() % 61;
+    zval = z1 - 30;
+    zabs = abs(zval);
+    if (zabs < 10){
+        xval = 12;
+    }
+    else if (zabs < 20) {
+        xval = 18;
     }
     else {
-        xval = 13;
+        xval = 22;
     }
     msg.angular.z = zval;
     msg.linear.x = xval;
@@ -40,7 +45,7 @@ void one_random(){
 
 void one_spin(){
     geometry_msgs::Twist msg;
-    msg.linear.x = 30;
+    msg.linear.x = 22;
     msg.angular.z = -20;
     cmd_vel_pub.publish(msg);
 }

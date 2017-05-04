@@ -21,7 +21,7 @@
 #include "geometry_msgs/Twist.h"
 
 #define THRESHOLD 0.3 // THRESHOLD FOR CLEAR
-#define VELOCITY 25
+#define VELOCITY 22
 #define ROBO_WIDTH 0.5 // in meters
 
 sensor_msgs::LaserScan scan;
@@ -73,7 +73,7 @@ void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
         // Move backward
         flag.data=1; //avoiding obstacles
         twist.angular.z = 0; //go straight backwards
-        twist.linear.x = -20; //back up, slowly
+        twist.linear.x = -12; //back up, slowly
     }
 
     else if (forward_distance < 0.7)
@@ -82,11 +82,11 @@ void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
         angle_val = (smallest)/ (number_of_ranges);
         if (angle_val < 0.5) {
             //turn left
-            twist.angular.z = -40;
+            twist.angular.z = -30;
         }
         else if (angle_val >= 0.5){
             //turn right
-            twist.angular.z = 40;
+            twist.angular.z = 30;
         }
 
     }
@@ -94,7 +94,7 @@ void controlSpeed(const sensor_msgs::LaserScan lidar_scan)
         // Move forward
         flag.data=0; //not avoiding obstacles
         twist.angular.z = 0; //go straight forward
-        twist.linear.x = 20; //drive forward
+        twist.linear.x = 12; //drive forward
         //ROS_INFO_STREAM(cmd_array);
     }
     obstacle_flag.publish(flag);

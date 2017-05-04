@@ -100,7 +100,7 @@ def check_status(miss_stat_val):
     miss_stat_read = miss_stat_val.data;
 
 
-cap = cv2.VideoCapture(0) #1 for webcam
+cap = cv2.VideoCapture(1) #1 for webcam
 cap.set(3,400)
 cap.set(4,300)
 twist = Twist()
@@ -142,33 +142,38 @@ while(True):
             twist.angular.z = 0.0
             twist.linear.x = 0.0
             miss_stat = 1
-            talker(twist,miss_stat)
+            talker(twist,miss_stat);
         except rospy.ROSInterruptException:
             pass
         pass
     else:
         try:
             [biggest_rect, angle] = box(rects, img_o)
-            twist.angular.z = angle  #(angle/180.0)*100
-            twist.linear.x = 15
+            twist.angular.z = angle   #(angle/180.0)*100
             action = distance(biggest_rect, img_o)
-
             if (action):
-                if ((abs(angle) < 0.8)):
+                if ((abs(angle) < 2)):
                     miss_stat = 3
                 else:
                     miss_stat = 2
                     twist.linear.x = -20
                     twist.angular.z = 0
-                talker(twist,miss_stat)
+                talker(twist,miss_stat);
 
             else:
+                aabs = abs(angle)
+                if aabs < 10:
+                    twist.linear.x = 12;
+                elif aabs < 20: 
+                    twist.linear.x = 18;
+                else:
+                    twist.linear.x = 22;
                 miss_stat = 2
-                talker(twist,miss_stat)
+                talker(twist,miss_stat);
         except rospy.ROSInterruptException:
             pass
 
-    #cv2.imshow("frame", img_o)
+    cv2.imshow("frame", img_o)
     k = cv2.waitKey(1) & 0xFF
     if k == ord('q'):
         break
