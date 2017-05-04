@@ -168,7 +168,9 @@ while(True):
         pass
     else:
         if miss_stat_read == 4:
-            pass
+            twist.linear.x = 0
+            twist.angular.z = 0
+            talker(twist,miss_stat);
         else:
             try:
                 [biggest_rect, angle] = box(rects, img_o)
