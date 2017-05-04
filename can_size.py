@@ -173,7 +173,7 @@ while(True):
 
             action = distance(biggest_rect, img_o)
             if (action):
-                if ((abs(angle_new) < 7)):
+                if ((abs(angle_new) < 5)):
 
                     miss_stat = 3
                 else:
