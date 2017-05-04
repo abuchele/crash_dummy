@@ -10,8 +10,8 @@ class returner:
     def __init__(self):
 
         rospy.init_node("returner")
-        self.pub = rospy.publisher("command", int16)
-        rospy.Subscriber("goHome", tuple, self.encoder_callback)
+        self.pub = rospy.publisher("gohome/cmd_vel", Twist)
+        #rospy.Subscriber("goHome", tuple, self.encoder_callback)
         #rospy.Subscriber("lidar_vel", twist, self.get_back)
         self.leftChange = 0
         self.rightChange = 0
