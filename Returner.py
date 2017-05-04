@@ -11,7 +11,7 @@ class returner:
 
         rospy.init_node("returner")
         self.pub = rospy.publisher("gohome/cmd_vel", Twist)
-        #rospy.Subscriber("goHome", tuple, self.encoder_callback)
+        rospy.Subscriber("encoder", tuple, self.encoder_callback)
         #rospy.Subscriber("lidar_vel", twist, self.get_back)
         self.leftChange = 0
         self.rightChange = 0
@@ -33,6 +33,7 @@ class returner:
             raw = data.data
             self.leftChange = raw[0]
             self.rightChange = raw[1]
+            self.update_position()
 
     def update_position(self):
         right_length = self.right_change * self.P2L
@@ -54,6 +55,7 @@ class returner:
 
         #Alternatively, if have a map, then can set temporary waypoints
         #this would help a lot.
+
         ideal_angle = np.arctan(self.position[1] / self.position[0]) + np.pi/2.0
 
         # if self.is_clear == False: #To be implemented
@@ -76,3 +78,11 @@ class returner:
             self.twist.angular.z = 0
 
         pub.publish(twist)
+
+r = returner()
+while True:
+    r.getBack()
+
+    k = cv2.waitKey(1) & 0xFF
+    if k == ord('q'):
+	       break
