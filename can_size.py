@@ -14,16 +14,14 @@ from std_msgs.msg import Int8
 miss_stat_read = 0;
 
 doMask = True # set to True if you want to do the red mask, otherwise False
-if doMask:
-    cascade = cv2.CascadeClassifier("cascade0.xml") #use the classifier that works with the mask
-else:
-    cascade = cv2.CascadeClassifier("cascade.xml")
+
 
 
 def detect(img):
     #rects = cascade.detectMultiScale(img, 1.3, 4, cv2.CASCADE_SCALE_IMAGE, (20,20))
 
-    conts, hierarchy = cv2.findContours(img.copy(), cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+
+    _, conts, hierarchy = cv2.findContours(img.copy(), cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 
     #adapter code so that it still gives you a rectangle.
     rects = []
@@ -80,8 +78,7 @@ def distance(rect, img):
     y2 = rect[3]
     height = abs(y1-y2)
     distance = (height_cm*focal_length)/height
-    print distance
-    if 15.0 < distance < 38.0 :
+    if 27.0 < distance < 47.0 :
         return True
     return False
 
@@ -112,7 +109,8 @@ def check_status(miss_stat_val):
     miss_stat_read = miss_stat_val.data;
 
 
-cap = cv2.VideoCapture(1) #1 for webcam
+cap = cv2.VideoCapture(0) #1 for webcam
+
 cap.set(3,400)
 cap.set(4,300)
 twist = Twist()
@@ -169,16 +167,14 @@ while(True):
         try:
             [biggest_rect, angle] = box(rects, img_o)
 
+            angle_new = angle - 3
             cv2.rectangle(screen, (biggest_rect[0], biggest_rect[1]),(biggest_rect[2], biggest_rect[3]), (0,0,0))
-            cv2.imshow("hi", screen)
-            twist.angular.z = angle  #(angle/180.0)*100
-            twist.linear.x = 15
-
-            twist.angular.z = angle   #(angle/180.0)*100
+            twist.angular.z = angle_new   #(angle/180.0)*100
 
             action = distance(biggest_rect, img_o)
             if (action):
-                if ((abs(angle) < 2)):
+                if ((abs(angle_new) < 7)):
+
                     miss_stat = 3
                 else:
                     miss_stat = 2

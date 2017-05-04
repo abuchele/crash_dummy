@@ -64,8 +64,12 @@ class arbiter(object):
                 self.msg.linear.x = self.rwk_vel_x
                 self.msg.angular.z = self.rwk_vel_z
         elif self.miss_stat == 2: #drive to can
-            self.msg.linear.x = self.can_vel_x
-            self.msg.angular.z = self.can_vel_z
+            if self.flag:
+                self.msg.linear.x = self.obst_vel_x
+                self.msg.angular.z = self.obst_vel_z
+            else:
+                self.msg.linear.x = self.can_vel_x
+                self.msg.angular.z = self.can_vel_z
         elif self.miss_stat == 3: #pick up can
             self.msg.linear.x = 0
             self.msg.angular.z = 0
@@ -76,8 +80,16 @@ class arbiter(object):
             self.msg.angular.z = 0
             self.miss_stat = 1
         elif self.miss_stat == 4: #drive home! This functionality does not exist yet, but we are hopeful.
-            self.msg.linear.x = self.gohome_vel_x
-            self.msg.angular.z = self.gohome_vel_z
+            #self.msg.linear.x = 0  
+            #self.msg.angular.z = 0 
+
+            #if this functionality exists, uncomment the next two lines, and comment out the previous two.
+            if self.flag:
+                self.msg.linear.x = self.obst_vel_x
+                self.msg.angular.z = self.obst_vel_z
+            else:
+                self.msg.linear.x = self.gohome_vel_x
+                self.msg.angular.z = self.gohome_vel_z 
         else:
             pass
             #we shouldn't be here!
