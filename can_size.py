@@ -158,7 +158,10 @@ while(True):
         try:
             twist.angular.z = 0.0
             twist.linear.x = 0.0
-            miss_stat = 1
+            if miss_stat_read == 4:
+                miss_stat = 4
+            else:
+                miss_stat = 1
             talker(twist,miss_stat);
         except rospy.ROSInterruptException:
             pass
