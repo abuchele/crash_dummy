@@ -11,7 +11,7 @@ from std_msgs.msg import Bool
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Int8
 
-miss_stat_read = 0;
+global miss_stat_read
 global miss_stat
 
 cap = cv2.VideoCapture(0) #1 for webcam
@@ -106,12 +106,9 @@ def talker(coke_can,miss_stat_tosend):
 
 
 def check_status(miss_stat_val):
-    global miss_stat_read
     miss_stat_read = miss_stat_val.data;
 
 def run_can_size():
-    global miss_stat
-
     while(True):
 
         rospy.Subscriber('/miss_stat', Int8, check_status)
