@@ -12,6 +12,7 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Int8
 
 miss_stat_read = 0;
+miss_stat = 1;
 
 doMask = True # set to True if you want to do the red mask, otherwise False
 
@@ -170,6 +171,7 @@ while(True):
         if miss_stat_read == 4:
             twist.linear.x = 0
             twist.angular.z = 0
+            miss_stat = 4
             talker(twist,miss_stat);
         else:
             try:
